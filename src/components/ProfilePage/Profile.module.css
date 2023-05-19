@@ -1,0 +1,25 @@
+.navigation {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.link {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 10px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.link:hover {
+  background-color: rgb(42, 81, 97);
+  /* rgb(20,215,242) */
+  /* #7d87ec */
+}
+
+a{
+  color: rgb(255,255,255)
+  
+}
