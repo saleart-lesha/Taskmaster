@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import Header from './components/Header/Header';
 import NavBar from './components/NavBar/NavBar';
+import Profile from './components/ProfilePage/Profile';
 
 function App() {
   return (
@@ -13,7 +14,9 @@ function App() {
         <div className='leftPanel'>
           <NavBar />
         </div>
-        <div className='rightPanel'>111</div>
+        <div className='rightPanel'>
+          <Profile />
+        </div>
       </div>
     </div>
   );
