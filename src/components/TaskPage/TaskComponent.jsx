@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import styles from "./TaskComponent.module.css";
+import TaskInputForm from "./TaskInputForm/TaskInputForm";
+import TaskList from "./TaskList/TaskList";
+
 
 function TaskComponent() {
     const [description, setDescription] = useState("");
@@ -49,50 +52,17 @@ function TaskComponent() {
     return (
         <div className={styles.container}>
             <h1 className={styles.heading}>Создать задачу</h1>
-            <div className={styles.inputContainer}>
-                <input
-                    type="text"
-                    placeholder="Описание"
-                    value={description}
-                    onChange={handleDescriptionChange}
-                    className={styles.input}
-                />
-                <input
-                    type="date"
-                    placeholder="Deadline"
-                    value={deadline}
-                    onChange={handleDeadlineChange}
-                    className={styles.input}
-                />
-                <select
-                    value={employee}
-                    onChange={handleEmployeeChange}
-                    className={styles.select}
-                >
-                    <option value="">Сотрудники</option>
-                    <option value="Иванов И.И">Иванов И.И</option>
-                    <option value="Петров П.П">Петров П.П</option>
-                    <option value="Кириллов А.А">Кириллов А.А</option>
-                    <option value="Субботин К.А">Субботин К.А</option>
-                </select>
-                <button onClick={handleSave} className={styles.button}>
-                    Сохранить
-                </button>
-            </div>
+            <TaskInputForm
+                description={description}
+                deadline={deadline}
+                employee={employee}
+                onDescriptionChange={handleDescriptionChange}
+                onDeadlineChange={handleDeadlineChange}
+                onEmployeeChange={handleEmployeeChange}
+                onSave={handleSave}
+            />
             {tasks.length > 0 && (
-                <div className={styles.tasksList}>
-                    <h2 className={styles.subheading}>Активные задачи</h2>
-                    <button onClick={handleFilter} className={styles.button}>
-                        Отфильтровать
-                    </button>
-                    {tasks.map((task, index) => (
-                        <div key={index} className={styles.task}>
-                            <p>{task.description}</p>
-                            <p>{task.deadline}</p>
-                            <p>{task.employee}</p>
-                        </div>
-                    ))}
-                </div>
+                <TaskList tasks={tasks} onFilter={handleFilter} />
             )}
         </div>
     );
