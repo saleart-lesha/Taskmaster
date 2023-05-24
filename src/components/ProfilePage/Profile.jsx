@@ -39,17 +39,32 @@ const Profile = () => {
                 <div className={styles.editable}>
                     <label htmlFor="name">
                         <a>ФИО:</a>
-                        <input type="text" id="name" value={name} onChange={handleNameChange} />
+                        <input
+                            type="text"
+                            id="name"
+                            value={name}
+                            onChange={handleNameChange}
+                        />
                     </label>
                     <label htmlFor="email">
                         <a>Email:</a>
-                        <input type="text" id="email" value={email} onChange={handleEmailChange} />
+                        <input
+                            type="text"
+                            id="email"
+                            value={email}
+                            onChange={handleEmailChange}
+                        />
                     </label>
                     <label htmlFor="phone">
                         <a>Телефон:</a>
-                        <input type="text" id="phone" value={phone} onChange={handlePhoneChange} />
+                        <input
+                            type="text"
+                            id="phone"
+                            value={phone}
+                            onChange={handlePhoneChange}
+                        />
                     </label>
-                    <label htmlFo="photo">
+                    <label htmlFor="photo">
                         <a>Фото:</a>
                         <input type="file" id="photo" onChange={handlePhotoChange} />
                     </label>
@@ -68,9 +83,15 @@ const Profile = () => {
                         </div>
                     )}
                     <div className={styles.bio}>
-                        <div className={styles.name}><a>ФИО: {name}</a></div>
-                        <div><a>Email: {email}</a></div>
-                        <div><a>Телефон: {phone}</a></div>
+                        <div className={styles.name}>
+                            <a>ФИО: {name}</a>
+                        </div>
+                        <div>
+                            <a>Email: {email}</a>
+                        </div>
+                        <div>
+                            <a>Телефон: {phone}</a>
+                        </div>
                     </div>
                     <button className={styles.edit} onClick={handleEdit}>
                         Изменить
