@@ -6,6 +6,8 @@ import Profile from './components/ProfilePage/Profile';
 import TaskComponent from './components/TaskPage/TaskComponent';
 import { Route, Routes } from 'react-router-dom';
 import Statement from './components/Statement/TaskPage/Statement';
+import StaffList from './components/StaffPage/StaffList';
+import Calendar from './components/CalendarPage/Calendar';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
             <Route path="/profile" element={<Profile />}> </Route>
             <Route path="/tasks" element={<TaskComponent />}> </Route>
             <Route path="/reports" element={<Statement />}> </Route>
+            <Route path="/employees" element={<StaffList />}> </Route>
+            <Route path="/calendar" element={<Calendar />}> </Route>
           </Routes>
 
         </div>

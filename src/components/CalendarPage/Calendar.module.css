@@ -1,0 +1,32 @@
+.calendar {
+  font-family: Arial, sans-serif;
+  border: 1px solid #ccc;
+  padding: 20px;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-gap: 10px;
+}
+
+.calendar-cell {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+.calendar-cell.muted {
+  color: #999;
+}
+
+.calendar-cell.today {
+  background-color: #eee;
+}
