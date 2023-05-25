@@ -1,16 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./Profile.module.css";
 import EditableProfile from "./ProfileEdit/EditableProfile";
 import ReadOnlyProfile from "./BIO/ReadOnlyProfile";
 
-
 const Profile = () => {
     const [isEditing, setIsEditing] = useState(false);
-    const [name, setName] = useState("Иванов И.И.");
-    const [email, setEmail] = useState("ivano.ivan@example.com");
-    const [phone, setPhone] = useState("123-456-7890");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
     const [photo, setPhoto] = useState("");
+
+    useEffect(() => {
+        loadProfileData();
+    }, []);
+
+    const loadProfileData = async () => {
+        try {
+            const response = await axios.get("http://localhost:3001/api/profile");
+            const profileData = response.data;
+            setName(profileData.name);
+            setEmail(profileData.email);
+            setPhone(profileData.phone);
+            setPhoto(profileData.photo);
+        } catch (error) {
+            console.error("Ошибка при загрузке профиля", error);
+        }
+    };
 
     const handleEdit = () => {
         setIsEditing(!isEditing);
@@ -18,6 +35,7 @@ const Profile = () => {
 
     const handleSave = () => {
         setIsEditing(false);
+        // Выполните здесь запрос на сохранение данных профиля, если необходимо
     };
 
     const handleNameChange = (e) => {

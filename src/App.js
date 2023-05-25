@@ -22,7 +22,7 @@ function App() {
         <div className='rightPanel'>
           <Routes>
             <Route path="/" element={<Profile />}> </Route>
-            <Route path="/profile" element={<Profile />}> </Route>
+            <Route path="/api/profile" element={<Profile />}> </Route>
             <Route path="/tasks" element={<TaskComponent />}> </Route>
             <Route path="/reports" element={<Statement />}> </Route>
             <Route path="/employees" element={<StaffList />}> </Route>
