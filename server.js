@@ -1,74 +1,60 @@
 const cors = require("cors");
-const express = require('express');
-const { connectToDB, getDb } = require('./db');
-const { async } = require('q');
+const express = require("express");
+const { connectToDB, getProfilesCollection } = require("./db");
 
 const PORT = 3001;
 
 const app = express();
 
-let db;
+let profilesCollection;
+
+app.use(cors());
+app.use(express.json());
 
 connectToDB((err) => {
     if (!err) {
+        profilesCollection = getProfilesCollection();
         app.listen(PORT, (err) => {
             err ? console.log(err) : console.log(`Listening port ${PORT}`);
         });
-        db = getDb();
-    }
-    else {
+    } else {
         console.log(`DB connection error: ${err}`);
     }
 });
 
 app.get("/api/profile", async (req, res) => {
-    const profilesCollection = db.collection("profiles");
-
-    const test = await profilesCollection.find()
-    console.log(test)
-    return res.status(200).send(test)
-
-
-
-    // profilesCollection.findOne({}, (err, profile) => {
-    //     if (err) {
-    //         console.error("Ошибка при получении профиля из базы данных", err);
-    //         return res.status(500).json({ error: "Ошибка при получении профиля" });
-    //     }
-    //     res.status(200);
-    //     console.log(profile);
-    //     return res.json(profile);
-    // });
+    try {
+        const profile = await profilesCollection.findOne();
+        res.json(profile);
+    } catch (error) {
+        console.error("Ошибка при получении профиля", error);
+        res.status(500).json({ error: "Ошибка при получении профиля" });
+    }
 });
 
-// app.use(cors())
+app.put("/api/profile", async (req, res) => {
+    try {
+        const updatedProfile = req.body;
+        const profile = await profilesCollection.findOne();
 
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+        const updateData = {};
+        Object.keys(updatedProfile).forEach((key) => {
+            if (updatedProfile[key] !== null && key !== "_id") {
+                updateData[key] = updatedProfile[key];
+            }
+        });
+
+        await profilesCollection.updateOne({ _id: profile._id }, { $set: updateData });
+        res.sendStatus(200);
+    } catch (error) {
+        console.error("Ошибка при обновлении профиля", error);
+        res.status(500).json({ error: "Внутренняя ошибка сервера" });
+    }
+});
+
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
     next();
 });
-
-
-// app.get("/api/profile", (req, res) => {
-//     const profilesCollection = db.collection("profiles");
-
-//     profilesCollection.findOne({}, (err, profile) => {
-//         if (err) {
-//             console.error("Ошибка при получении профиля из базы данных", err);
-//             return res.status(500).json({ error: "Ошибка при получении профиля" });
-//         }
-
-//         return res.json(profile);
-//     });
-// });
-
-// app.use(function (req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header(
-//         "Access-Control-Allow-Headers",
-//         "Origin, X-Requested-With, Content-Type, Accept"
-//     );
-//     next();
-// });

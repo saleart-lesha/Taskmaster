@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import styles from "./Profile.module.css";
-import EditableProfile from "./ProfileEdit/EditableProfile";
 import ReadOnlyProfile from "./BIO/ReadOnlyProfile";
+import EditableProfile from "./ProfileEdit/EditableProfile";
+import styles from "./Profile.module.css";
 
 const Profile = () => {
     const [isEditing, setIsEditing] = useState(false);
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [photo, setPhoto] = useState("");
+    const [profileData, setProfileData] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        photo: ""
+    });
 
     useEffect(() => {
         loadProfileData();
@@ -20,10 +21,7 @@ const Profile = () => {
         try {
             const response = await axios.get("http://localhost:3001/api/profile");
             const profileData = response.data;
-            setName(profileData.name);
-            setEmail(profileData.email);
-            setPhone(profileData.phone);
-            setPhoto(profileData.photo);
+            setProfileData(profileData);
         } catch (error) {
             console.error("Ошибка при загрузке профиля", error);
         }
@@ -33,26 +31,37 @@ const Profile = () => {
         setIsEditing(!isEditing);
     };
 
-    const handleSave = () => {
-        setIsEditing(false);
-        // Выполните здесь запрос на сохранение данных профиля, если необходимо
+    const handleSave = async () => {
+        try {
+            const filteredProfileData = Object.fromEntries(
+                Object.entries(profileData).filter(([key, value]) => value !== null && value !== "")
+            );
+
+            await axios.put("http://localhost:3001/api/profile", filteredProfileData);
+            setIsEditing(false);
+            loadProfileData();
+        } catch (error) {
+            console.error("Ошибка при сохранении профиля", error);
+        }
     };
 
-    const handleNameChange = (e) => {
-        setName(e.target.value);
-    };
-
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-    };
-
-    const handlePhoneChange = (e) => {
-        setPhone(e.target.value);
+    const handleInputChange = (name, value) => {
+        setProfileData((prevData) => ({
+            ...prevData,
+            [name]: value
+        }));
     };
 
     const handlePhotoChange = (e) => {
-        setPhoto(URL.createObjectURL(e.target.files[0]));
+        setProfileData((prevData) => ({
+            ...prevData,
+            photo: URL.createObjectURL(e.target.files[0])
+        }));
     };
+
+
+
+    const { name, email, phone, photo } = profileData;
 
     return (
         <div className={styles.profile}>
@@ -62,9 +71,7 @@ const Profile = () => {
                     email={email}
                     phone={phone}
                     photo={photo}
-                    onNameChange={handleNameChange}
-                    onEmailChange={handleEmailChange}
-                    onPhoneChange={handlePhoneChange}
+                    onInputChange={handleInputChange}
                     onPhotoChange={handlePhotoChange}
                     onSave={handleSave}
                 />

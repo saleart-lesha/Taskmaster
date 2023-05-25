@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./EditableProfile.module.css";
 
@@ -7,25 +7,28 @@ const EditableProfile = ({
     email,
     phone,
     photo,
-    onNameChange,
-    onEmailChange,
-    onPhoneChange,
+    onInputChange,
     onPhotoChange,
     onSave,
 }) => {
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        onInputChange(name, value);
+    };
+
     return (
         <div className={styles.editable}>
             <label htmlFor="name">
                 <a>ФИО:</a>
-                <input type="text" id="name" value={name} onChange={onNameChange} />
+                <input type="text" id="name" name="name" value={name} onChange={handleInputChange} />
             </label>
             <label htmlFor="email">
                 <a>Email:</a>
-                <input type="text" id="email" value={email} onChange={onEmailChange} />
+                <input type="text" id="email" name="email" value={email} onChange={handleInputChange} />
             </label>
             <label htmlFor="phone">
                 <a>Телефон:</a>
-                <input type="text" id="phone" value={phone} onChange={onPhoneChange} />
+                <input type="text" id="phone" name="phone" value={phone} onChange={handleInputChange} />
             </label>
             <label htmlFor="photo">
                 <a>Фото:</a>
