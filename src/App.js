@@ -23,7 +23,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Profile />}> </Route>
             <Route path="/api/profile" element={<Profile />}> </Route>
-            <Route path="/tasks" element={<TaskComponent />}> </Route>
+            <Route path="/api/tasks" element={<TaskComponent />}> </Route>
             <Route path="/reports" element={<Statement />}> </Route>
             <Route path="/employees" element={<StaffList />}> </Route>
             <Route path="/calendar" element={<Calendar />}> </Route>

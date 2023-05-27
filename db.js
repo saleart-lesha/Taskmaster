@@ -4,6 +4,7 @@ const URL = 'mongodb://0.0.0.0:27017/TaskMaster';
 
 let dbConnection;
 let profilesCollection;
+let tasksCollection;
 
 module.exports = {
     connectToDB: (cb) => {
@@ -12,6 +13,7 @@ module.exports = {
                 console.log('Connected to MongoDB');
                 dbConnection = client.db();
                 profilesCollection = dbConnection.collection('profiles');
+                tasksCollection = dbConnection.collection("tasks");
                 return cb();
             })
             .catch((err) => {
@@ -19,5 +21,6 @@ module.exports = {
             });
     },
     getDb: () => dbConnection,
-    getProfilesCollection: () => profilesCollection
+    getProfilesCollection: () => profilesCollection,
+    getTasksCollection: () => tasksCollection
 };

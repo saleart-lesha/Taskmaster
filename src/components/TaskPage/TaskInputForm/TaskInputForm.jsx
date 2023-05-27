@@ -1,35 +1,93 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./TaskInputForm.module.css";
 
-function TaskInputForm({ description, deadline, employee, onDescriptionChange, onDeadlineChange, onEmployeeChange, onSave }) {
+function TaskInputForm({ employees, onSave }) {
+    const [taskTitle, setTaskTitle] = useState("");
+    const [taskDescription, setTaskDescription] = useState("");
+    const [taskDeadline, setTaskDeadline] = useState("");
+    const [selectedEmployee, setSelectedEmployee] = useState("");
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
+    const handleTitleChange = (event) => {
+        setTaskTitle(event.target.value);
+    };
+
+    const handleDescriptionChange = (event) => {
+        setTaskDescription(event.target.value);
+    };
+
+    const handleDeadlineChange = (event) => {
+        setTaskDeadline(event.target.value);
+    };
+
+    const handleEmployeeChange = (event) => {
+        setSelectedEmployee(event.target.value);
+    };
+
+    useEffect(() => {
+        // Проверяем, заполнены ли все поля
+        const isFormValid =
+            taskTitle.trim() !== "" &&
+            taskDescription.trim() !== "" &&
+            taskDeadline !== "" &&
+            selectedEmployee !== "";
+        setIsButtonDisabled(!isFormValid);
+    }, [taskTitle, taskDescription, taskDeadline, selectedEmployee]);
+
+    const handleSave = () => {
+        const newTask = {
+            title: taskTitle,
+            description: taskDescription,
+            deadline: taskDeadline,
+            employee: selectedEmployee,
+        };
+        onSave(newTask);
+        setTaskTitle("");
+        setTaskDescription("");
+        setTaskDeadline("");
+        setSelectedEmployee("");
+    };
+
     return (
         <div className={styles.inputContainer}>
             <input
                 type="text"
-                placeholder="Описание"
-                value={description}
-                onChange={onDescriptionChange}
+                placeholder="Название задачи"
+                value={taskTitle}
+                onChange={handleTitleChange}
                 className={styles.input}
             />
+            <textarea
+                placeholder="Описание"
+                value={taskDescription}
+                onChange={handleDescriptionChange}
+                className={styles.textarea}
+            ></textarea>
             <input
                 type="date"
                 placeholder="Deadline"
-                value={deadline}
-                onChange={onDeadlineChange}
+                value={taskDeadline}
+                min={new Date().toISOString().split("T")[0]}
+                onChange={handleDeadlineChange}
                 className={styles.input}
             />
             <select
-                value={employee}
-                onChange={onEmployeeChange}
+                value={selectedEmployee}
+                onChange={handleEmployeeChange}
                 className={styles.select}
             >
                 <option value="">Сотрудники</option>
-                <option value="Иванов И.И">Иванов И.И</option>
-                <option value="Петров П.П">Петров П.П</option>
-                <option value="Кириллов А.А">Кириллов А.А</option>
-                <option value="Субботин К.А">Субботин К.А</option>
+                {employees.map((employee) => (
+                    <option key={employee} value={employee}>
+                        {employee}
+                    </option>
+                ))}
             </select>
-            <button onClick={onSave} className={styles.button}>
+            <button
+                onClick={handleSave}
+                className={styles.button}
+                disabled={isButtonDisabled}
+            >
                 Сохранить
             </button>
         </div>
