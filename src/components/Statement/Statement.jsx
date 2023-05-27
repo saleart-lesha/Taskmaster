@@ -47,18 +47,24 @@ const Statement = (tasks) => {
     };
 
     return (
-        <div>
-            <h1>Statement Component</h1>
-            <button onClick={handleSortTasks}>Sort by Status</button>
+        <div className={styles.statementContainer}>
+            <h1 className={styles.heading}>Statement Component</h1>
+            <button className={styles.button} onClick={handleSortTasks}>
+                Sort by Status
+            </button>
             {sortedTasks.map((task, index) => (
-                <div key={index} onClick={() => handleTaskClick(index)}>
-                    {task.description}
-                    {task.deadline}
-                    {task.employee}
+                <div
+                    key={index}
+                    className={`${styles.task} ${selectedTask === task ? styles.selectedTask : ""}`}
+                    onClick={() => handleTaskClick(index)}
+                >
+                    <p className={styles.taskDescription}>{task.description}</p>
+                    <p className={styles.taskDeadline}>{task.deadline}</p>
+                    <p className={styles.taskEmployee}>{task.employee}</p>
                 </div>
             ))}
             {selectedTask && (
-                <div>
+                <div className={styles.selectedTask}>
                     <h2>Task Details</h2>
                     <p>Description: {selectedTask.description}</p>
                     <p>Deadline: {selectedTask.deadline}</p>
@@ -67,8 +73,10 @@ const Statement = (tasks) => {
                         Status: {selectedTask.completed ? "Completed" : "Incomplete"}
                     </p>
                     {selectedTask.completed && (
-                        <div>
-                            <button onClick={handleDownloadFile}>Download File</button>
+                        <div className={styles.taskActions}>
+                            <button className={styles.button} onClick={handleDownloadFile}>
+                                Download File
+                            </button>
                             <p>
                                 Rating:{" "}
                                 <input
@@ -77,13 +85,20 @@ const Statement = (tasks) => {
                                     max="5"
                                     value={rating}
                                     onChange={handleRatingChange}
+                                    className={styles.ratingInput}
                                 />
                             </p>
                             <p>
                                 Comment:{" "}
-                                <input value={comment} onChange={handleCommentChange} />
+                                <input
+                                    value={comment}
+                                    onChange={handleCommentChange}
+                                    className={styles.commentInput}
+                                />
                             </p>
-                            <button onClick={handleSaveRating}>Save Rating</button>
+                            <button className={styles.button} onClick={handleSaveRating}>
+                                Save Rating
+                            </button>
                         </div>
                     )}
                 </div>

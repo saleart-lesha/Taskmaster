@@ -6,6 +6,7 @@ let dbConnection;
 let profilesCollection;
 let tasksCollection;
 let usersCollection;
+let staffCollection;
 
 module.exports = {
     connectToDB: (cb) => {
@@ -16,6 +17,7 @@ module.exports = {
                 profilesCollection = dbConnection.collection('profiles');
                 tasksCollection = dbConnection.collection("tasks");
                 usersCollection = dbConnection.collection('users');
+                staffCollection = dbConnection.collection('staff');
                 return cb();
             })
             .catch((err) => {
@@ -25,6 +27,7 @@ module.exports = {
     getDb: () => dbConnection,
     getProfilesCollection: () => profilesCollection,
     getTasksCollection: () => tasksCollection,
-    getUsersCollection: () => usersCollection
+    getUsersCollection: () => usersCollection,
+    getStaffCollection: () => staffCollection
 
 };

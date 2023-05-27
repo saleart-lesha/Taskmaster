@@ -1,7 +1,8 @@
 const cors = require("cors");
 const express = require("express");
 const bcrypt = require('bcrypt');
-const { connectToDB, getProfilesCollection, getTasksCollection, getUsersCollection } = require("./db");
+const { connectToDB, getProfilesCollection, getTasksCollection, getUsersCollection, getStaffCollection } = require("./db");
+
 
 const PORT = 3001;
 
@@ -10,6 +11,7 @@ const app = express();
 let profilesCollection;
 let tasksCollection;
 let usersCollection;
+let staffCollection;
 
 app.use(cors());
 app.use(express.json());
@@ -27,6 +29,7 @@ connectToDB((err) => {
         profilesCollection = getProfilesCollection();
         tasksCollection = getTasksCollection();
         usersCollection = getUsersCollection();
+        staffCollection = getStaffCollection();
         app.listen(PORT, (err) => {
             err ? console.log(err) : console.log(`Listening port ${PORT}`);
         });
@@ -114,3 +117,44 @@ app.post("/api/tasks", async (req, res) => {
     }
 });
 
+
+// Staff
+
+app.get("/api/staff", (req, res) => {
+    staffCollection
+        .find()
+        .toArray()
+        .then((data) => {
+            res.json(data);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json({ error: "Failed to fetch staff data" });
+        });
+});
+
+app.post("/api/staff", (req, res) => {
+    const newStaff = req.body;
+    staffCollection
+        .insertOne(newStaff)
+        .then(() => {
+            res.status(201).json({ message: "Сотрудник успешно добавлен" });
+        })
+        .catch((err) => {
+            console.log("Ошибка при добавлении сотрудника:", err);
+            res.status(500).json({ error: "Не удалось добавить сотрудника" });
+        });
+});
+
+app.delete("/api/staff/:id", (req, res) => {
+    const id = req.params.id;
+    staffCollection
+        .deleteOne({ _id: id }, (err) => {
+            if (err) {
+                console.log("Ошибка при удалении сотрудника:", err);
+                res.status(500).json({ error: "Не удалось удалить сотрудника" });
+            } else {
+                res.status(200).json({ message: "Сотрудник успешно удален" });
+            }
+        });
+});
