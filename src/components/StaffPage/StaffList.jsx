@@ -50,13 +50,14 @@ const StaffList = () => {
             .delete(`http://localhost:3001/api/staff/${id}`)
             .then((response) => {
                 setStaff((prevStaff) =>
-                    prevStaff.filter((member) => member.id !== id)
+                    prevStaff.filter((member) => member._id !== id)
                 );
             })
             .catch((error) => {
                 console.log("Ошибка при удалении сотрудника:", error);
             });
     };
+
 
     return (
         <div className={styles.staffListContainer}>
@@ -73,7 +74,7 @@ const StaffList = () => {
                         </div>
                         <button
                             className={styles.deleteButton}
-                            onClick={() => handleDeleteStaff(member.id)}
+                            onClick={() => handleDeleteStaff(member._id)}
                         >
                             Delete
                         </button>

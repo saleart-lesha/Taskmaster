@@ -1,6 +1,7 @@
 const cors = require("cors");
 const express = require("express");
 const bcrypt = require('bcrypt');
+const { ObjectId } = require("mongodb");
 const { connectToDB, getProfilesCollection, getTasksCollection, getUsersCollection, getStaffCollection } = require("./db");
 
 
@@ -135,6 +136,7 @@ app.get("/api/staff", (req, res) => {
 
 app.post("/api/staff", (req, res) => {
     const newStaff = req.body;
+    newStaff._id = new ObjectId(); // Генерируем новый ObjectId
     staffCollection
         .insertOne(newStaff)
         .then(() => {
@@ -146,11 +148,22 @@ app.post("/api/staff", (req, res) => {
         });
 });
 
+
+// ...
+
 app.delete("/api/staff/:id", async (req, res) => {
-    const id = req.params.id;
     try {
-        await staffCollection.deleteOne({ _id: id });
-        res.status(200).json({ message: "Сотрудник успешно удален" });
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({ error: "Отсутствует идентификатор сотрудника" });
+        }
+        console.log(id);
+        const result = await staffCollection.deleteOne({ _id: new ObjectId(id) });
+        if (result.deletedCount === 1) {
+            res.status(200).json({ message: "Сотрудник успешно удален" });
+        } else {
+            res.status(404).json({ error: "Сотрудник не найден" });
+        }
     } catch (error) {
         console.log("Ошибка при удалении сотрудника:", error);
         res.status(500).json({ error: "Не удалось удалить сотрудника" });
