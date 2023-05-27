@@ -1,6 +1,7 @@
 const cors = require("cors");
 const express = require("express");
-const { connectToDB, getProfilesCollection, getTasksCollection } = require("./db");
+const bcrypt = require('bcrypt');
+const { connectToDB, getProfilesCollection, getTasksCollection, getUsersCollection } = require("./db");
 
 const PORT = 3001;
 
@@ -8,6 +9,7 @@ const app = express();
 
 let profilesCollection;
 let tasksCollection;
+let usersCollection;
 
 app.use(cors());
 app.use(express.json());
@@ -24,6 +26,7 @@ connectToDB((err) => {
     if (!err) {
         profilesCollection = getProfilesCollection();
         tasksCollection = getTasksCollection();
+        usersCollection = getUsersCollection();
         app.listen(PORT, (err) => {
             err ? console.log(err) : console.log(`Listening port ${PORT}`);
         });
@@ -31,6 +34,33 @@ connectToDB((err) => {
         console.log(`DB connection error: ${err}`);
     }
 });
+
+app.post('/api/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // Найти пользователя по указанному email
+        const user = await usersCollection.findOne({ email });
+
+        if (!user) {
+            // Пользователь не найден
+            res.sendStatus(401); // Unauthorized
+            return;
+        }
+
+        if (user.password === password) {
+            // Пароль совпадает, аутентификация успешна
+            res.sendStatus(200);
+        } else {
+            // Пароль не совпадает, аутентификация неуспешна
+            res.sendStatus(401); // Unauthorized
+        }
+    } catch (error) {
+        console.error('Ошибка аутентификации', error);
+        res.sendStatus(500);
+    }
+});
+
 
 app.get("/api/profile", async (req, res) => {
     try {
