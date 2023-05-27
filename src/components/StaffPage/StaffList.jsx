@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./StaffList.module.css";
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
 
 const StaffList = () => {
     const [staff, setStaff] = useState([]);
@@ -9,6 +8,10 @@ const StaffList = () => {
     const [newStaffPosition, setNewStaffPosition] = useState("");
 
     useEffect(() => {
+        fetchStaff();
+    }, []); // Передаем пустой массив зависимостей, чтобы эффект выполнился только один раз при загрузке компонента
+
+    const fetchStaff = () => {
         axios
             .get("http://localhost:3001/api/staff")
             .then((response) => {
@@ -17,14 +20,11 @@ const StaffList = () => {
             .catch((error) => {
                 console.log("Ошибка при загрузке данных:", error);
             });
-    }, []);
+    };
 
     const handleAddStaff = () => {
         if (newStaffName && newStaffPosition) {
-            const id = uuidv4(); // Генерация уникального ID для нового сотрудника
-
             const newStaff = {
-                id,
                 name: newStaffName,
                 position: newStaffPosition,
                 taskCount: 0,
@@ -33,7 +33,7 @@ const StaffList = () => {
             axios
                 .post("http://localhost:3001/api/staff", newStaff)
                 .then((response) => {
-                    setStaff((prevStaff) => [...prevStaff, newStaff]);
+                    fetchStaff(); // Обновляем список сотрудников после добавления
                     setNewStaffName("");
                     setNewStaffPosition("");
                 })

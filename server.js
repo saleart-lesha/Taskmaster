@@ -146,15 +146,13 @@ app.post("/api/staff", (req, res) => {
         });
 });
 
-app.delete("/api/staff/:id", (req, res) => {
+app.delete("/api/staff/:id", async (req, res) => {
     const id = req.params.id;
-    staffCollection
-        .deleteOne({ _id: id }, (err) => {
-            if (err) {
-                console.log("Ошибка при удалении сотрудника:", err);
-                res.status(500).json({ error: "Не удалось удалить сотрудника" });
-            } else {
-                res.status(200).json({ message: "Сотрудник успешно удален" });
-            }
-        });
+    try {
+        await staffCollection.deleteOne({ _id: id });
+        res.status(200).json({ message: "Сотрудник успешно удален" });
+    } catch (error) {
+        console.log("Ошибка при удалении сотрудника:", error);
+        res.status(500).json({ error: "Не удалось удалить сотрудника" });
+    }
 });
