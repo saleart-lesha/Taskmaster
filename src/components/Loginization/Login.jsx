@@ -50,7 +50,7 @@ function Login({ onLogin }) {
                 />
 
                 <label htmlFor="password" className={styles.form__label}>
-                    Password:
+                    Пароль:
                 </label>
                 <input
                     type="password"
@@ -61,7 +61,7 @@ function Login({ onLogin }) {
                 />
 
                 <button type="submit" className={styles.form__submit}>
-                    Sign In
+                    Войти
                 </button>
             </form>
         </div>

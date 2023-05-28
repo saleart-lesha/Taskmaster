@@ -61,7 +61,7 @@ const StaffList = () => {
 
     return (
         <div className={styles.staffListContainer}>
-            <h1 className={styles.heading}>Staff List Component</h1>
+            <h1 className={styles.heading}>Список сотрудников</h1>
             <ul className={styles.staffList}>
                 {staff.map((member) => (
                     <li key={member.id} className={styles.member}>
@@ -70,35 +70,35 @@ const StaffList = () => {
                             <p>{member.position}</p>
                         </div>
                         <div className={styles.taskCount}>
-                            <span>{member.taskCount}</span> tasks
+                            <span>{member.taskCount}</span> Задачи
                         </div>
                         <button
                             className={styles.deleteButton}
                             onClick={() => handleDeleteStaff(member._id)}
                         >
-                            Delete
+                            Удалить
                         </button>
                     </li>
                 ))}
             </ul>
             <div className={styles.addMember}>
-                <h2>Add New Staff Member</h2>
+                <h2>Добавить сотрудника</h2>
                 <input
                     type="text"
-                    placeholder="Name"
+                    placeholder="ФИО"
                     value={newStaffName}
                     onChange={(e) => setNewStaffName(e.target.value)}
                     className={styles.inputField}
                 />
                 <input
                     type="text"
-                    placeholder="Position"
+                    placeholder="Должность"
                     value={newStaffPosition}
                     onChange={(e) => setNewStaffPosition(e.target.value)}
                     className={styles.inputField}
                 />
                 <button className={styles.addButton} onClick={handleAddStaff}>
-                    Add New Staff Member
+                    Добавить
                 </button>
             </div>
         </div>
