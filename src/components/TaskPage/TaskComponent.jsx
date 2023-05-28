@@ -16,8 +16,7 @@ function TaskDetails({ selectedTask, styles }) {
 function TaskComponent() {
     const [tasks, setTasks] = useState([]);
     const [selectedTask, setSelectedTask] = useState(null);
-
-    const employees = ["Иванов И.И", "Петров П.П", "Кириллов А.А", "Субботин К.А"];
+    const [employees, setEmployees] = useState([]);
 
     const handleSaveTask = (newTask) => {
         axios
@@ -42,6 +41,18 @@ function TaskComponent() {
             })
             .catch((error) => {
                 console.log("Error loading tasks:", error);
+            });
+    }, []);
+
+    useEffect(() => {
+        axios
+            .get("http://localhost:3001/api/staff") // Путь к API для получения списка сотрудников
+            .then((response) => {
+                const staffList = response.data.map((staff) => staff.name);
+                setEmployees(staffList);
+            })
+            .catch((error) => {
+                console.log("Error loading staff:", error);
             });
     }, []);
 
