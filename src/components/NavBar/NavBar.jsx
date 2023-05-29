@@ -9,7 +9,7 @@ const NavBar = () => {
             <Link to="/api/tasks" className={styles.link}>Задачи</Link>
             <Link to="/reports" className={styles.link}>Отчёты</Link>
             <Link to="/api/staff" className={styles.link}>Сотрудники</Link>
-            <Link to="/calendar" className={styles.link}>Календарь</Link>
+            <Link to="/api/calendar" className={styles.link}>Календарь</Link>
         </nav>
     );
 };

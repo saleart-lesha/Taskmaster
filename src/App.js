@@ -6,11 +6,13 @@ import Header from './components/Header/Header';
 import NavBar from './components/NavBar/NavBar';
 import Profile from './components/ProfilePage/Profile';
 import TaskComponent from './components/TaskPage/TaskComponent';
-import Statement from './components/Statement/Statement';
+// import Statement from './components/Reports/Statement';
 import StaffList from './components/StaffPage/StaffList';
 import Calendar from './components/CalendarPage/Calendar';
 import Login from './components/Loginization/Login';
-import { useNavigate } from 'react-router-dom';
+import Reports from './components/Reports/Reports';
+// import { useNavigate } from 'react-router-dom';
+// import ReportComponent from './components/Reports/Reports';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -37,9 +39,9 @@ function App() {
                 <Route path="/" element={<Profile />}> </Route>
                 <Route path="/api/profile" element={<Profile />}> </Route>
                 <Route path="/api/tasks" element={<TaskComponent />}> </Route>
-                <Route path="/reports" element={<Statement />}> </Route>
+                <Route path="/reports" element={<Reports />}> </Route>
                 <Route path="/api/staff" element={<StaffList />}> </Route>
-                <Route path="/calendar" element={<Calendar />}> </Route>
+                <Route path="/api/calendar" element={<Calendar />}> </Route>
               </Routes>
             </div>
           </div>
@@ -48,5 +50,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;

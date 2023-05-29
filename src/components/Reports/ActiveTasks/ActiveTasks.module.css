@@ -1,0 +1,60 @@
+.activeTasks {
+  margin-bottom: 20px;
+}
+
+.task {
+  cursor: pointer;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.task h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.task.expanded {
+  background-color: #f9f9f9;
+}
+
+.rating {
+  margin-top: 10px;
+}
+
+.rating label {
+  font-weight: bold;
+}
+
+.comment {
+  margin-top: 10px;
+}
+
+.comment textarea {
+  width: 100%;
+  height: 100px;
+}
+
+.file {
+  margin-top: 10px;
+}
+
+.file label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+button {
+  margin-top: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0069d9;
+}

@@ -2,7 +2,7 @@ const cors = require("cors");
 const express = require("express");
 const bcrypt = require('bcrypt');
 const { ObjectId } = require("mongodb");
-const { connectToDB, getProfilesCollection, getTasksCollection, getUsersCollection, getStaffCollection } = require("./db");
+const { connectToDB, getProfilesCollection, getTasksCollection, getUsersCollection, getStaffCollection, getTaskCompletedCollection } = require("./db");
 
 
 const PORT = 3001;
@@ -13,6 +13,7 @@ let profilesCollection;
 let tasksCollection;
 let usersCollection;
 let staffCollection;
+let taskCompletedCollection;
 
 app.use(cors());
 app.use(express.json());
@@ -31,6 +32,7 @@ connectToDB((err) => {
         tasksCollection = getTasksCollection();
         usersCollection = getUsersCollection();
         staffCollection = getStaffCollection();
+        taskCompletedCollection = getTaskCompletedCollection();
         app.listen(PORT, (err) => {
             err ? console.log(err) : console.log(`Listening port ${PORT}`);
         });
@@ -191,5 +193,50 @@ app.get("/api/tasks", async (req, res) => {
     } catch (error) {
         console.error("Ошибка при получении задач", error);
         res.status(500).json({ error: "Ошибка при получении задач" });
+    }
+});
+
+
+app.get('/api/completedTasks', async (req, res) => {
+    try {
+        const completedTasks = await taskCompletedCollection.find().toArray();
+        res.json(completedTasks);
+    } catch (error) {
+        console.error('Ошибка при получении завершенных задач', error);
+        res.status(500).json({ error: 'Ошибка при получении завершенных задач' });
+    }
+});
+
+
+app.post('/api/taskCompleted', async (req, res) => {
+    try {
+        const taskCompleted = req.body;
+        await taskCompletedCollection.insertOne(taskCompleted);
+
+        const taskId = taskCompleted._id;
+        await tasksCollection.deleteOne({ _id: new ObjectId(taskId) });
+
+        res.sendStatus(200);
+    } catch (error) {
+        console.error('Ошибка при сохранении завершенной задачи', error);
+        res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    }
+});
+
+app.delete("/api/tasks/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({ error: "Отсутствует идентификатор задачи" });
+        }
+        const result = await tasksCollection.deleteOne({ _id: new ObjectId(id) });
+        if (result.deletedCount === 1) {
+            res.status(200).json({ message: "Задача успешно удалена" });
+        } else {
+            res.status(404).json({ error: "Задача не найдена" });
+        }
+    } catch (error) {
+        console.log("Ошибка при удалении задачи:", error);
+        res.status(500).json({ error: "Не удалось удалить задачу" });
     }
 });
