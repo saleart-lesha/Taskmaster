@@ -1,8 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Calendar.module.css";
+import axios from "axios";
 
 const Calendar = () => {
     const [date, setDate] = useState(new Date());
+    const [tasks, setTasks] = useState([]);
+
+    useEffect(() => {
+        axios
+            .get("http://localhost:3001/api/tasks")
+            .then((response) => {
+                setTasks(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
 
     const changeMonth = (delta) => {
         setDate((prevDate) => {
@@ -20,85 +33,53 @@ const Calendar = () => {
     };
 
     const getDaysInMonth = () => {
-        const daysInMonth = new Date(
-            date.getFullYear(),
-            date.getMonth() + 1,
-            0
-        ).getDate();
-
+        const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
         return Array.from({ length: daysInMonth }, (_, i) => i + 1);
     };
 
-    const getDaysInPrevMonth = () => {
-        const lastDayPrevMonth = new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            0
-        ).getDate();
-
-        const startWeekDay = new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            0
-        ).getDay();
-
-        return Array.from(
-            { length: startWeekDay },
-            (_, i) => lastDayPrevMonth - startWeekDay + i + 1
-        );
-    };
-
-    const getDaysInNextMonth = () => {
-        const lastDayCurrMonth = new Date(
-            date.getFullYear(),
-            date.getMonth() + 1,
-            0
-        ).getDate();
-
-        const lastDayCurrWeekDay = new Date(
-            date.getFullYear(),
-            date.getMonth() + 1,
-            0
-        ).getDay();
-
-        const remainingDays = 7 - lastDayCurrWeekDay;
-
-        return Array.from({ length: remainingDays }, (_, i) => i + 1);
+    const getTasksForDate = (day) => {
+        const formattedDate = new Date(date.getFullYear(), date.getMonth(), day).toISOString().split('T')[0];
+        return tasks.filter(task => task.deadline.split('T')[0] === formattedDate);
     };
 
     return (
-        <div className={styles["calendar-header"]}>
-            <button onClick={() => changeMonth(-1)}>Предыдущий месяц</button>
-            <h2>
-                {date.toLocaleString("ru", { month: "long", year: "numeric" })}
-            </h2>
-            <button onClick={() => changeMonth(1)}>Следующий месяц</button>
+        <div className={styles.calendar}>
+            <div className={styles.header}>
+                <button className={styles.button} onClick={() => changeMonth(-1)}>
+                    &lt;
+                </button>
+                <h2 className={styles.title}>
+                    {date.toLocaleString("ru", { month: "long", year: "numeric" })}
+                </h2>
+                <button className={styles.button} onClick={() => changeMonth(1)}>
+                    &gt;
+                </button>
+            </div>
 
-            <div className={styles["calendar-grid"]}>
+            <div className={styles.grid}>
                 {["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"].map((dayName) => (
-                    <div key={dayName} className={styles["calendar-cell"]}>
+                    <div key={dayName} className={styles.cell}>
                         {dayName}
                     </div>
                 ))}
-                {[...getDaysInPrevMonth(), ...getDaysInMonth(), ...getDaysInNextMonth()].map(
-                    (day, i) => {
-                        const isPrevMonth = i < getDaysInPrevMonth().length;
-                        const isNextMonth =
-                            i >= getDaysInPrevMonth().length + getDaysInMonth().length;
-                        const isToday =
-                            new Date().toDateString() ===
-                            new Date(date.getFullYear(), date.getMonth(), day).toDateString();
-                        return (
-                            <div
-                                key={i}
-                                className={`${styles["calendar-cell"]} ${isPrevMonth || isNextMonth ? styles["muted"] : ""
-                                    } ${isToday ? styles["today"] : ""}`}
-                            >
-                                {day}
-                            </div>
-                        );
-                    }
-                )}
+
+                {getDaysInMonth().map((day) => {
+                    const formattedDate = new Date(date.getFullYear(), date.getMonth(), day).toISOString().split('T')[0];
+                    const isToday = formattedDate === new Date().toISOString().split('T')[0];
+                    const tasksForDate = getTasksForDate(day);
+
+                    return (
+                        <div
+                            key={day}
+                            className={`${styles.cell} ${tasksForDate.length > 0 ? styles.hasTasks : ""} ${isToday ? styles.today : ""}`}
+                        >
+                            <div className={styles.day}>{day}</div>
+                            {tasksForDate.map((task) => (
+                                <div key={task._id} className={styles.task}>{task.title}</div>
+                            ))}
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );

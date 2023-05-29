@@ -30,5 +30,4 @@ module.exports = {
     getTasksCollection: () => tasksCollection,
     getUsersCollection: () => usersCollection,
     getStaffCollection: () => staffCollection
-
 };

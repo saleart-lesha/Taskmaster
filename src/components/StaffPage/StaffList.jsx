@@ -9,17 +9,28 @@ const StaffList = () => {
 
     useEffect(() => {
         fetchStaff();
-    }, []); // Передаем пустой массив зависимостей, чтобы эффект выполнился только один раз при загрузке компонента
+    }, []);
 
-    const fetchStaff = () => {
-        axios
-            .get("http://localhost:3001/api/staff")
-            .then((response) => {
-                setStaff(response.data);
-            })
-            .catch((error) => {
-                console.log("Ошибка при загрузке данных:", error);
-            });
+    const fetchStaff = async () => {
+        try {
+            const response = await axios.get("http://localhost:3001/api/staff");
+            const staffData = response.data;
+            const updatedStaff = await Promise.all(
+                staffData.map(async (member) => {
+                    const tasksResponse = await axios.get(
+                        `http://localhost:3001/api/tasks?employee=${encodeURIComponent(member.name)}`
+                    );
+                    const taskCount = tasksResponse.data.length;
+                    return {
+                        ...member,
+                        taskCount: taskCount,
+                    };
+                })
+            );
+            setStaff(updatedStaff);
+        } catch (error) {
+            console.log("Ошибка при загрузке данных:", error);
+        }
     };
 
     const handleAddStaff = () => {
@@ -33,7 +44,7 @@ const StaffList = () => {
             axios
                 .post("http://localhost:3001/api/staff", newStaff)
                 .then((response) => {
-                    fetchStaff(); // Обновляем список сотрудников после добавления
+                    fetchStaff();
                     setNewStaffName("");
                     setNewStaffPosition("");
                 })
@@ -58,13 +69,12 @@ const StaffList = () => {
             });
     };
 
-
     return (
         <div className={styles.staffListContainer}>
             <h1 className={styles.heading}>Список сотрудников</h1>
             <ul className={styles.staffList}>
                 {staff.map((member) => (
-                    <li key={member.id} className={styles.member}>
+                    <li key={member._id} className={styles.member}>
                         <div className={styles.memberInfo}>
                             <h3>{member.name}</h3>
                             <p>{member.position}</p>
