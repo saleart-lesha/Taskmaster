@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const { ObjectId } = require("mongodb");
 const { connectToDB, getProfilesCollection, getTasksCollection, getUsersCollection, getStaffCollection } = require("./db");
 
+
 const PORT = 3001;
 
 const app = express();
@@ -15,6 +16,7 @@ let staffCollection;
 
 app.use(cors());
 app.use(express.json());
+
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -50,9 +52,7 @@ app.post('/api/login', async (req, res) => {
             return;
         }
 
-        const passwordMatch = await bcrypt.compare(password, user.password);
-
-        if (passwordMatch) {
+        if (user.password === password) {
             // Пароль совпадает, аутентификация успешна
             res.sendStatus(200);
         } else {
@@ -64,6 +64,7 @@ app.post('/api/login', async (req, res) => {
         res.sendStatus(500);
     }
 });
+
 
 app.get("/api/profile", async (req, res) => {
     try {
@@ -95,6 +96,7 @@ app.put("/api/profile", async (req, res) => {
     }
 });
 
+
 app.get("/api/tasks", async (req, res) => {
     try {
         const tasks = await tasksCollection.find().toArray();
@@ -115,6 +117,9 @@ app.post("/api/tasks", async (req, res) => {
         res.status(500).json({ error: "Внутренняя ошибка сервера" });
     }
 });
+
+
+// Staff
 
 app.get("/api/staff", (req, res) => {
     staffCollection
@@ -143,6 +148,9 @@ app.post("/api/staff", (req, res) => {
         });
 });
 
+
+// ...
+
 app.delete("/api/staff/:id", async (req, res) => {
     try {
         const id = req.params.id;
@@ -165,7 +173,9 @@ app.delete("/api/staff/:id", async (req, res) => {
 app.get("/api/tasks/count", async (req, res) => {
     try {
         const employee = req.query.employee;
+
         const count = await tasksCollection.countDocuments({ employee });
+
         res.json({ count });
     } catch (error) {
         console.error("Ошибка при получении количества задач", error);
