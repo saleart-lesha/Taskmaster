@@ -38,8 +38,19 @@ const Calendar = () => {
     };
 
     const getTasksForDate = (day) => {
-        const formattedDate = new Date(date.getFullYear(), date.getMonth(), day).toISOString().split('T')[0];
-        return tasks.filter(task => task.deadline.split('T')[0] === formattedDate);
+        const formattedDate = new Date(date.getFullYear(), date.getMonth(), day);
+        return tasks.filter(task => isSameDay(formattedDate, new Date(task.deadline)));
+    };
+
+    const isSameDay = (date1, date2) => {
+        const d1 = new Date(date1);
+        const d2 = new Date(date2);
+
+        return (
+            d1.getDate() === d2.getDate() &&
+            d1.getMonth() === d2.getMonth() &&
+            d1.getFullYear() === d2.getFullYear()
+        );
     };
 
     return (
@@ -65,7 +76,7 @@ const Calendar = () => {
 
                 {getDaysInMonth().map((day) => {
                     const formattedDate = new Date(date.getFullYear(), date.getMonth(), day).toISOString().split('T')[0];
-                    const isToday = formattedDate === new Date().toISOString().split('T')[0];
+                    const isToday = isSameDay(formattedDate, new Date().toISOString().split('T')[0]);
                     const tasksForDate = getTasksForDate(day);
 
                     return (
