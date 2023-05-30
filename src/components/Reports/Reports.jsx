@@ -73,7 +73,6 @@ const Reports = () => {
             <h2>Выполненные задачи</h2>
             <CompletedTasks tasks={completedTasks} onSelect={handleTaskSelect} />
 
-            <h2>Статистика</h2>
             <Statistics taskStats={taskStats} employeeStats={employeeStats} />
 
             {/* {selectedTask && (

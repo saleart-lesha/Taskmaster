@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Bar } from "react-chartjs-2";
 import Chart from "chart.js/auto";
+import styles from "./Statistics.module.css";
 
 const Statistics = () => {
     const [taskStats, setTaskStats] = useState(null);
@@ -9,7 +10,6 @@ const Statistics = () => {
     useEffect(() => {
         loadTaskStatistics();
     }, []);
-
 
     const loadTaskStatistics = async () => {
         try {
@@ -90,10 +90,12 @@ const Statistics = () => {
     };
 
     return (
-        <div>
-            <h3>Статистика выполненных задач</h3>
+        <div className={styles.container}>
+            <h3 className={styles["chart-title"]}>Статистика выполненных задач</h3>
             {taskStats ? (
-                <Bar data={data} options={options} />
+                <div className={styles["chart-container"]}>
+                    <Bar data={data} options={options} />
+                </div>
             ) : (
                 <p>Loading...</p>
             )}
