@@ -20,7 +20,6 @@ const ActiveTasks = () => {
 
     const handleTaskClick = (taskId) => {
         // Обработчик нажатия на задачу
-        // Здесь вы можете определить логику открытия/закрытия подробной информации о задаче
         if (expandedTask === taskId) {
             setExpandedTask(null);
         } else {
@@ -30,8 +29,6 @@ const ActiveTasks = () => {
 
     const handleRatingChange = (taskId, rating) => {
         // Обработчик изменения оценки задачи
-        // Здесь вы можете обновить локальное состояние задачи с новой оценкой
-        // или отправить запрос на сервер для обновления оценки задачи в базе данных
         setTasks(prevTasks => {
             return prevTasks.map(task => {
                 if (task._id === taskId) {
@@ -44,8 +41,6 @@ const ActiveTasks = () => {
 
     const handleCommentSubmit = (taskId, comment) => {
         // Обработчик отправки комментария к задаче
-        // Здесь вы можете обновить локальное состояние задачи с новым комментарием
-        // или отправить запрос на сервер для сохранения комментария в базе данных
         setTasks(prevTasks => {
             return prevTasks.map(task => {
                 if (task._id === taskId) {
@@ -58,7 +53,6 @@ const ActiveTasks = () => {
 
     const handleFileUpload = (taskId, file) => {
         // Обработчик загрузки файла для задачи
-        // Здесь вы можете отправить запрос на сервер для сохранения файла в базе данных
         setTasks(prevTasks => {
             return prevTasks.map(task => {
                 if (task._id === taskId) {
@@ -71,8 +65,6 @@ const ActiveTasks = () => {
 
     const handleRateTask = (taskId) => {
         // Обработчик нажатия на кнопку "Оценить" задачи
-        // Здесь вы можете проверить, заполнены ли все поля оценки, комментария и файла
-        // и отправить данные в коллекцию taskCompleted, а затем удалить задачу из коллекции tasks
         const task = tasks.find((task) => task._id === taskId);
 
         // Проверка на заполнение полей

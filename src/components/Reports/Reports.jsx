@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ActiveTasks from "./ActiveTasks/ActiveTasks";
+import CompletedTasks from "./CompletedTasks/CompletedTask";
 
 
 
@@ -68,11 +69,11 @@ const Reports = () => {
             <h2>Активные задачи</h2>
             <ActiveTasks tasks={activeTasks} onSelect={handleTaskSelect} />
 
-            {/* <h2>Выполненные задачи</h2>
+            <h2>Выполненные задачи</h2>
             <CompletedTasks tasks={completedTasks} onSelect={handleTaskSelect} />
 
             <h2>Статистика</h2>
-            <Statistics taskStats={taskStats} employeeStats={employeeStats} />
+            {/* <Statistics taskStats={taskStats} employeeStats={employeeStats} />
 
             {selectedTask && (
                 <TaskDetails
