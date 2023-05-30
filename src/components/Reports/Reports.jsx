@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ActiveTasks from "./ActiveTasks/ActiveTasks";
 import CompletedTasks from "./CompletedTasks/CompletedTask";
+import Statistics from "./Statistics/Statistics";
 
 
 
@@ -73,15 +74,15 @@ const Reports = () => {
             <CompletedTasks tasks={completedTasks} onSelect={handleTaskSelect} />
 
             <h2>Статистика</h2>
-            {/* <Statistics taskStats={taskStats} employeeStats={employeeStats} />
+            <Statistics taskStats={taskStats} employeeStats={employeeStats} />
 
-            {selectedTask && (
+            {/* {selectedTask && (
                 <TaskDetails
                     task={selectedTask}
                     onRating={handleTaskRating}
                     onClose={() => setSelectedTask(null)}
                 />
-            )} */}
+            )}  */}
         </div>
     );
 };
