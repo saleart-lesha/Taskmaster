@@ -91,9 +91,11 @@ const Reports = () => {
             <h2>Выполненные задачи</h2>
             <CompletedTasks tasks={completedTasks} onSelect={handleTaskSelect} />
 
+            <EmployeeStats employeeStats={employeeStats} />
+
             <Statistics taskStats={taskStats} employeeStats={employeeStats} />
 
-            <EmployeeStats employeeStats={employeeStats} />
+
         </div>
     );
 };

@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import styles from "./EmployeeStats.module.css";
 
 const EmployeeStats = () => {
     const [employeeStats, setEmployeeStats] = useState([]);
 
     useEffect(() => {
-        loadEmployeeStatistics(); // Загрузка статистики при монтировании компоненты
+        loadEmployeeStatistics();
 
         const interval = setInterval(() => {
-            loadEmployeeStatistics(); // Загрузка статистики через определенные промежутки времени (5 секунд в данном случае)
+            loadEmployeeStatistics();
         }, 5000);
 
         return () => {
-            clearInterval(interval); // Очистка интервала при размонтировании компоненты
+            clearInterval(interval);
         };
     }, []);
 
@@ -46,15 +47,24 @@ const EmployeeStats = () => {
     };
 
     return (
-        <div>
-            <h2>Статистика по сотрудникам</h2>
-            <ul>
-                {employeeStats.map((employee) => (
-                    <li key={employee.name}>
-                        {employee.name}: {employee.totalPoints} баллов
-                    </li>
-                ))}
-            </ul>
+        <div className={styles.container}>
+            <h2 className={styles.heading}>Статистика сотрудников</h2>
+            <table className={styles.statsTable}>
+                <thead>
+                    <tr>
+                        <th>ФИО сотрудника</th>
+                        <th>Баллы</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {employeeStats.map((employee) => (
+                        <tr key={employee.name}>
+                            <td className={styles.employeeName}>{employee.name}</td>
+                            <td className={styles.totalPoints}>{employee.totalPoints}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };
