@@ -3,7 +3,7 @@ import axios from "axios";
 import ActiveTasks from "./ActiveTasks/ActiveTasks";
 import CompletedTasks from "./CompletedTasks/CompletedTask";
 import Statistics from "./Statistics/Statistics";
-// import EmployeeStats from "./EmployeeStats/EmployeeStats";
+import EmployeeStats from "./EmployeeStats/EmployeeStats";
 
 const Reports = () => {
     const [activeTasks, setActiveTasks] = useState([]);
@@ -42,22 +42,31 @@ const Reports = () => {
     }, []);
 
     // Загрузка статистики задач
-    const loadTaskStatistics = async () => {
-        try {
-            const response = await axios.get("http://localhost:3001/api/taskStatistics");
-            const stats = response.data;
-            setTaskStats(stats);
-        } catch (error) {
-            console.log(error);
-        }
+    const loadTaskStatistics = () => {
+        // Загрузка статистики задач и установка значения в taskStats
+        // (реализация будет зависеть от вашей бэкенд-логики)
     };
 
     // Загрузка статистики по сотрудникам
     const loadEmployeeStatistics = async () => {
         try {
-            const response = await axios.get("http://localhost:3001/api/employeeStatistics");
+            const response = await axios.get("http://localhost:3001/api/completedTasks");
             const stats = response.data;
-            setEmployeeStats(stats);
+
+            // Объединение оценок задач для каждого сотрудника
+            const employeeStats = {};
+            stats.forEach((task) => {
+                const employee = task.employee;
+                const rating = parseInt(task.rating);
+
+                if (employeeStats[employee]) {
+                    employeeStats[employee] += rating;
+                } else {
+                    employeeStats[employee] = rating;
+                }
+            });
+
+            setEmployeeStats(employeeStats);
         } catch (error) {
             console.log(error);
         }
@@ -79,12 +88,12 @@ const Reports = () => {
             <h2>Активные задачи</h2>
             <ActiveTasks tasks={activeTasks} onSelect={handleTaskSelect} />
 
+            <h2>Выполненные задачи</h2>
             <CompletedTasks tasks={completedTasks} onSelect={handleTaskSelect} />
 
-            <Statistics taskStats={taskStats} />
+            <Statistics taskStats={taskStats} employeeStats={employeeStats} />
 
-            <h2>Статистика по сотрудникам</h2>
-            {/* <EmployeeStats employeeStats={employeeStats} /> */}
+            <EmployeeStats employeeStats={employeeStats} />
         </div>
     );
 };
