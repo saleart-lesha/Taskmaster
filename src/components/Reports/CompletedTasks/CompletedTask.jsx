@@ -2,20 +2,29 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./CompletedTask.module.css";
 
-const CompletedTasks = ({ onSelect }) => {
+const CompletedTasks = () => {
     const [completedTasks, setCompletedTasks] = useState([]);
 
     useEffect(() => {
-        // Загрузка выполненных задач с сервера
-        axios
-            .get("http://localhost:3001/api/completedTasks")
-            .then((response) => {
-                setCompletedTasks(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        fetchCompletedTasks();
+
+        // Задаем интервал для опроса сервера каждые 5 секунд
+        const interval = setInterval(fetchCompletedTasks, 5000);
+
+        // Очищаем интервал при размонтировании компонента
+        return () => {
+            clearInterval(interval);
+        };
     }, []);
+
+    const fetchCompletedTasks = async () => {
+        try {
+            const response = await axios.get("http://localhost:3001/api/completedTasks");
+            setCompletedTasks(response.data);
+        } catch (error) {
+            console.log("Ошибка при загрузке выполненных задач:", error);
+        }
+    };
 
     const handleTaskSelect = (taskId) => {
         const updatedTasks = completedTasks.map((task) => {
@@ -41,7 +50,6 @@ const CompletedTasks = ({ onSelect }) => {
 
     return (
         <div className={styles["completed-tasks-container"]}>
-            <h2>Выполненные задачи</h2>
             {completedTasks.map((task) => (
                 <div
                     key={task._id}
@@ -57,7 +65,6 @@ const CompletedTasks = ({ onSelect }) => {
                             <p>Описание: {formatTextWithLineBreaks(task.description)}</p>
                             <p>Дедлайн: {task.deadline}</p>
                             <p>Комментарий: {formatTextWithLineBreaks(task.comment)}</p>
-                            {/* Дополнительная информация о задаче */}
                         </div>
                     )}
                 </div>
