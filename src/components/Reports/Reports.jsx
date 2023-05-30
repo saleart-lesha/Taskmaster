@@ -3,8 +3,7 @@ import axios from "axios";
 import ActiveTasks from "./ActiveTasks/ActiveTasks";
 import CompletedTasks from "./CompletedTasks/CompletedTask";
 import Statistics from "./Statistics/Statistics";
-
-
+// import EmployeeStats from "./EmployeeStats/EmployeeStats";
 
 const Reports = () => {
     const [activeTasks, setActiveTasks] = useState([]);
@@ -43,15 +42,25 @@ const Reports = () => {
     }, []);
 
     // Загрузка статистики задач
-    const loadTaskStatistics = () => {
-        // Загрузка статистики задач и установка значения в taskStats
-        // (реализация будет зависеть от вашей бэкенд-логики)
+    const loadTaskStatistics = async () => {
+        try {
+            const response = await axios.get("http://localhost:3001/api/taskStatistics");
+            const stats = response.data;
+            setTaskStats(stats);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     // Загрузка статистики по сотрудникам
-    const loadEmployeeStatistics = () => {
-        // Загрузка статистики по сотрудникам и установка значения в employeeStats
-        // (реализация будет зависеть от вашей бэкенд-логики)
+    const loadEmployeeStatistics = async () => {
+        try {
+            const response = await axios.get("http://localhost:3001/api/employeeStatistics");
+            const stats = response.data;
+            setEmployeeStats(stats);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     // Обработчик выбора задачи для отображения подробной информации
@@ -70,18 +79,12 @@ const Reports = () => {
             <h2>Активные задачи</h2>
             <ActiveTasks tasks={activeTasks} onSelect={handleTaskSelect} />
 
-            <h2>Выполненные задачи</h2>
             <CompletedTasks tasks={completedTasks} onSelect={handleTaskSelect} />
 
-            <Statistics taskStats={taskStats} employeeStats={employeeStats} />
+            <Statistics taskStats={taskStats} />
 
-            {/* {selectedTask && (
-                <TaskDetails
-                    task={selectedTask}
-                    onRating={handleTaskRating}
-                    onClose={() => setSelectedTask(null)}
-                />
-            )}  */}
+            <h2>Статистика по сотрудникам</h2>
+            {/* <EmployeeStats employeeStats={employeeStats} /> */}
         </div>
     );
 };

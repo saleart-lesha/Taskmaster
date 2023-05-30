@@ -9,6 +9,14 @@ const Statistics = () => {
 
     useEffect(() => {
         loadTaskStatistics();
+
+        // Задаем интервал для опроса сервера каждые 5 секунд
+        const interval = setInterval(loadTaskStatistics, 5000);
+
+        // Очищаем интервал при размонтировании компонента
+        return () => {
+            clearInterval(interval);
+        };
     }, []);
 
     const loadTaskStatistics = async () => {
