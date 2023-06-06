@@ -275,8 +275,14 @@ app.post("/api/KnowledgeBase", async (req, res) => {
                 { role: "assistant", content: message },
             ],
         });
+        console.log(completion.data.choices);
 
-        const reply = completion.choices[0].message.content;
+        let reply = ""; // Значение по умолчанию
+
+        if (completion.data.choices && completion.data.choices.length > 0) {
+            reply = completion.data.choices[0].message.content;
+        }
+
         console.log(reply);
 
         // Сохраняем ответ в коллекцию KnowledgeBase
