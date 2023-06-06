@@ -1,8 +1,15 @@
 const cors = require("cors");
+const bodyParser = require("body-parser");
 const express = require("express");
 const bcrypt = require('bcrypt');
 const { ObjectId } = require("mongodb");
-const { connectToDB, getProfilesCollection, getTasksCollection, getUsersCollection, getStaffCollection, getTaskCompletedCollection } = require("./db");
+const { connectToDB, getProfilesCollection, getTasksCollection, getUsersCollection, getStaffCollection, getTaskCompletedCollection, getKnowledgeBaseCollection } = require("./db");
+const { Configuration, OpenAIApi } = require("openai");
+const configuration = new Configuration({
+    apiKey: "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",
+});
+const openai = new OpenAIApi(configuration)
+
 
 
 const PORT = 3001;
@@ -14,14 +21,16 @@ let tasksCollection;
 let usersCollection;
 let staffCollection;
 let taskCompletedCollection;
+let knowledgeBaseCollection;
 
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json());
 
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
     next();
 });
@@ -33,6 +42,7 @@ connectToDB((err) => {
         usersCollection = getUsersCollection();
         staffCollection = getStaffCollection();
         taskCompletedCollection = getTaskCompletedCollection();
+        knowledgeBaseCollection = getKnowledgeBaseCollection();
         app.listen(PORT, (err) => {
             err ? console.log(err) : console.log(`Listening port ${PORT}`);
         });
@@ -238,5 +248,44 @@ app.delete("/api/tasks/:id", async (req, res) => {
     } catch (error) {
         console.log("Ошибка при удалении задачи:", error);
         res.status(500).json({ error: "Не удалось удалить задачу" });
+    }
+});
+
+
+app.get("/api/KnowledgeBase", async (req, res) => {
+    try {
+        const knowledgeBase = await knowledgeBaseCollection.find().toArray();
+        res.json(knowledgeBase);
+    } catch (error) {
+        console.error("Ошибка при получении базы знаний", error);
+        res.status(500).json({ error: "Ошибка при получении базы знаний" });
+    }
+});
+
+
+app.post("/api/KnowledgeBase", async (req, res) => {
+    const { message } = req.body;
+
+    try {
+        // Отправляем запрос к модели ChatGPT
+        const completion = await openai.createChatCompletion({
+            model: "gpt-3.5-turbo",
+            messages: [
+                { role: "system", content: "You are a user" },
+                { role: "assistant", content: message },
+            ],
+        });
+
+        const reply = completion.choices[0].message.content;
+        console.log(reply);
+
+        // Сохраняем ответ в коллекцию KnowledgeBase
+        await knowledgeBaseCollection.insertOne({ message, reply });
+
+        // Отправляем ответ клиенту
+        res.json({ reply });
+    } catch (error) {
+        console.error("Ошибка при сохранении ответа в базу данных", error);
+        res.status(500).json({ error: "Внутренняя ошибка сервера" });
     }
 });

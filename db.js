@@ -9,6 +9,7 @@ let tasksCollection;
 let usersCollection;
 let staffCollection;
 let taskCompletedCollection;
+let knowledgeBaseCollection;
 
 module.exports = {
     connectToDB: (cb) => {
@@ -21,6 +22,7 @@ module.exports = {
                 usersCollection = dbConnection.collection('users');
                 staffCollection = dbConnection.collection('staff');
                 taskCompletedCollection = dbConnection.collection('taskCompleted');
+                knowledgeBaseCollection = dbConnection.collection('KnowledgeBase');
                 return cb();
             })
             .catch((err) => {
@@ -32,5 +34,6 @@ module.exports = {
     getTasksCollection: () => tasksCollection,
     getUsersCollection: () => usersCollection,
     getStaffCollection: () => staffCollection,
-    getTaskCompletedCollection: () => taskCompletedCollection
+    getTaskCompletedCollection: () => taskCompletedCollection,
+    getKnowledgeBaseCollection: () => knowledgeBaseCollection
 };

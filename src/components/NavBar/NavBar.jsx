@@ -10,6 +10,7 @@ const NavBar = () => {
             <Link to="/reports" className={styles.link}>Отчёты</Link>
             <Link to="/api/staff" className={styles.link}>Сотрудники</Link>
             <Link to="/api/calendar" className={styles.link}>Календарь</Link>
+            <Link to="/api/messages" className={styles.link}>Помощь</Link>
         </nav>
     );
 };

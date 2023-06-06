@@ -11,6 +11,7 @@ import StaffList from './components/StaffPage/StaffList';
 import Calendar from './components/CalendarPage/Calendar';
 import Login from './components/Loginization/Login';
 import Reports from './components/Reports/Reports';
+import KnowledgeBaseChat from './components/KnowledgeBase/KnowledgeBaseChat';
 // import { useNavigate } from 'react-router-dom';
 // import ReportComponent from './components/Reports/Reports';
 
@@ -42,6 +43,7 @@ function App() {
                 <Route path="/reports" element={<Reports />}> </Route>
                 <Route path="/api/staff" element={<StaffList />}> </Route>
                 <Route path="/api/calendar" element={<Calendar />}> </Route>
+                <Route path="/api/messages" element={<KnowledgeBaseChat />}> </Route>
               </Routes>
             </div>
           </div>
