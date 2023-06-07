@@ -14,6 +14,7 @@ const KnowledgeBaseChat = () => {
         try {
             const response = await axios.get("http://localhost:3001/api/KnowledgeBase");
             const messageHistory = response.data;
+            console.log(messageHistory);
             setMessages(messageHistory);
         } catch (error) {
             console.log(error);
@@ -28,7 +29,7 @@ const KnowledgeBaseChat = () => {
                 message: inputText,
             });
             const newMessage = response.data;
-            setMessages([...messages, newMessage]);
+            setMessages([...messages, { message: inputText, reply: newMessage.reply }]);
             setInputText("");
         } catch (error) {
             console.log(error);
@@ -45,15 +46,12 @@ const KnowledgeBaseChat = () => {
             <div className={styles["message-history"]}>
                 {messages.map((message, index) => (
                     <div key={index} className={styles.message}>
-                        {message.sender === "user" ? (
-                            <div className={`${styles.bubble} ${styles["user-bubble"]}`}>
-                                <div className={styles["message-text"]}>{message.message}</div>
-                            </div>
-                        ) : (
-                            <div className={`${styles.bubble} ${styles["assistant-bubble"]}`}>
-                                <div className={styles["message-text"]}>{message.reply}</div>
-                            </div>
-                        )}
+                        <div className={`${styles.bubble} ${styles["user-bubble"]}`}>
+                            <div className={styles["message-text"]}>{message.message}</div>
+                        </div>
+                        <div className={`${styles.bubble} ${styles["assistant-bubble"]}`}>
+                            <div className={styles["message-text"]}>{message.reply}</div>
+                        </div>
                     </div>
                 ))}
             </div>
