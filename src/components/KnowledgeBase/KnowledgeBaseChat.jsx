@@ -22,7 +22,7 @@ const KnowledgeBaseChat = () => {
 
     const sendMessage = async () => {
         try {
-            axios.defaults.headers.post['Content-Type'] = 'application/json'; // Добавьте эту строку
+            axios.defaults.headers.post["Content-Type"] = "application/json";
 
             const response = await axios.post("http://localhost:3001/api/KnowledgeBase", {
                 message: inputText,
@@ -43,12 +43,17 @@ const KnowledgeBaseChat = () => {
         <div className={styles.container}>
             <h2 className={styles["chat-heading"]}>База знаний: Чат</h2>
             <div className={styles["message-history"]}>
-                {messages.map((message) => (
-                    <div key={message._id} className={styles.message}>
-                        <div className={styles["message-text"]}>{message.reply}</div>
-                        <div className={styles["message-timestamp"]}>
-                            {new Date(message.timestamp).toLocaleString()}
-                        </div>
+                {messages.map((message, index) => (
+                    <div key={index} className={styles.message}>
+                        {message.sender === "user" ? (
+                            <div className={`${styles.bubble} ${styles["user-bubble"]}`}>
+                                <div className={styles["message-text"]}>{message.message}</div>
+                            </div>
+                        ) : (
+                            <div className={`${styles.bubble} ${styles["assistant-bubble"]}`}>
+                                <div className={styles["message-text"]}>{message.reply}</div>
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>
