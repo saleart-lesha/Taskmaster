@@ -44,16 +44,22 @@ const KnowledgeBaseChat = () => {
         <div className={styles.container}>
             <h2 className={styles["chat-heading"]}>База знаний: Чат</h2>
             <div className={styles["message-history"]}>
-                {messages.map((message, index) => (
-                    <div key={index} className={styles.message}>
-                        <div className={`${styles.bubble} ${styles["user-bubble"]}`}>
-                            <div className={styles["message-text"]}>{message.message}</div>
+                <div className={styles["message-wrapper"]}>
+                    {messages.map((message, index) => (
+                        <div key={index} className={styles.message}>
+                            <div
+                                className={`${styles.bubble} ${styles["user-bubble"]}`}
+                            >
+                                <div className={styles["message-text"]}>{message.message}</div>
+                            </div>
+                            <div
+                                className={`${styles.bubble} ${styles["assistant-bubble"]}`}
+                            >
+                                <div className={styles["message-text"]}>{message.reply}</div>
+                            </div>
                         </div>
-                        <div className={`${styles.bubble} ${styles["assistant-bubble"]}`}>
-                            <div className={styles["message-text"]}>{message.reply}</div>
-                        </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
             <div className={styles["input-container"]}>
                 <input
