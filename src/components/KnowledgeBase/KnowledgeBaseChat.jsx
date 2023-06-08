@@ -62,12 +62,12 @@ const KnowledgeBaseChat = () => {
                 </div>
             </div>
             <div className={styles["input-container"]}>
-                <input
-                    type="text"
+                <textarea
                     value={inputText}
                     onChange={handleInputChange}
                     placeholder="Введите сообщение..."
-                    className={styles["input-text"]}
+                    className={styles["input-textarea"]} // Заменили класс стиля на input-textarea
+                    rows={3}
                 />
                 <button onClick={sendMessage} className={styles["send-button"]}>
                     Отправить

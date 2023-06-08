@@ -12,14 +12,15 @@
 }
 
 .message-history {
-  width: 400px;
-  height: 300px;
-  overflow-y: scroll; /* Используем прокрутку */
+  width: 100%;
+  max-width: 600px; /* Добавлено ограничение на максимальную ширину */
+  height: 500px;
+  overflow-y: scroll;
   border: 1px solid #ccc;
   margin-bottom: 10px;
   display: flex;
-  flex-direction: column-reverse; /* Изменили направление отображения на обратное */
-  align-items: flex-start; /* Изменили выравнивание на левую сторону */
+  flex-direction: column-reverse;
+  align-items: flex-start;
   padding: 10px;
 }
 
@@ -40,7 +41,7 @@
 }
 
 .user-bubble {
-  background-color: #f0f0f0;
+  background-color: #eeffe5;
   align-self: flex-end;
 }
 
@@ -51,7 +52,7 @@
 
 .small-assistant-bubble {
   align-self: flex-start;
-  max-width: 50%; /* Ограничиваем ширину маленьких сообщений ассистента */
+  max-width: 50%;
 }
 
 .input-container {
@@ -59,18 +60,21 @@
   align-items: center;
 }
 
-.input-text {
+.input-textarea {
   flex: 1;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
   margin-right: 10px;
+  resize: vertical;
+  min-height: 50px;
+  min-width: 496px; /* Заменили фиксированную ширину на минимальную ширину */
 }
 
 .send-button {
   padding: 8px 16px;
   border: none;
-  background-color: #4caf50;
+  background-color: #062ffc;
   color: #fff;
   cursor: pointer;
   border-radius: 4px;
