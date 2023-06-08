@@ -59,8 +59,6 @@ const Profile = () => {
         }));
     };
 
-
-
     const { name, email, phone, photo } = profileData;
 
     return (

@@ -13,26 +13,30 @@ const StaffList = () => {
 
     const fetchStaff = async () => {
         try {
-            const response = await axios.get("http://localhost:3001/api/staff");
-            const staffData = response.data;
+            const staffResponse = await axios.get("http://localhost:3001/api/staff");
+            const staffData = staffResponse.data;
+
             const updatedStaff = await Promise.all(
                 staffData.map(async (member) => {
-                    const tasksResponse = await axios.get(
-                        `http://localhost:3001/api/tasks?employee=${encodeURIComponent(member.name)}`
+                    const countResponse = await axios.get(
+                        `http://localhost:3001/api/tasks/count?employee=${encodeURIComponent(
+                            member.name
+                        )}`
                     );
-                    const taskCount = tasksResponse.data.length;
+                    const taskCount = countResponse.data.count;
+
                     return {
                         ...member,
                         taskCount: taskCount,
                     };
                 })
             );
+
             setStaff(updatedStaff);
         } catch (error) {
             console.log("Ошибка при загрузке данных:", error);
         }
     };
-
     const handleAddStaff = () => {
         if (newStaffName && newStaffPosition) {
             const newStaff = {
@@ -82,12 +86,14 @@ const StaffList = () => {
                         <div className={styles.taskCount}>
                             <span>{member.taskCount}</span> Задачи
                         </div>
-                        <button
-                            className={styles.deleteButton}
-                            onClick={() => handleDeleteStaff(member._id)}
-                        >
-                            Удалить
-                        </button>
+                        <div className={styles.actions}>
+                            <button
+                                className={styles.deleteButton}
+                                onClick={() => handleDeleteStaff(member._id)}
+                            >
+                                Удалить
+                            </button>
+                        </div>
                     </li>
                 ))}
             </ul>

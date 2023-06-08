@@ -6,7 +6,7 @@ const { ObjectId } = require("mongodb");
 const { connectToDB, getProfilesCollection, getTasksCollection, getUsersCollection, getStaffCollection, getTaskCompletedCollection, getKnowledgeBaseCollection } = require("./db");
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
-    apiKey: "",
+    apiKey: "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",
 });
 const openai = new OpenAIApi(configuration)
 

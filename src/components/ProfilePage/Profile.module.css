@@ -1,10 +1,21 @@
-/* Общий контейнер */
-.profile{
-  margin: 100px 450px;
+.profile {
+  margin: 50px auto;
   border: 2px solid rgb(4, 89, 122);
   border-radius: 10px;
   box-shadow: 0 0 10px rgb(4, 89, 122);
   padding: 20px;
-  background-color: rgb(0,64,89)
+  background-color: rgb(0, 64, 89);
+  width: 40%;
 }
 
+@media screen and (max-width: 768px) {
+  .profile {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .profile {
+    width: 95%;
+  }
+}
