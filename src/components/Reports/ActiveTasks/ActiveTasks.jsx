@@ -39,6 +39,47 @@ const ActiveTasks = () => {
         });
     };
 
+    const handleDifficultyChange = (taskId, difficulty) => {
+        setTasks(prevTasks => {
+            return prevTasks.map(task => {
+                if (task._id === taskId) {
+                    return { ...task, difficulty: difficulty };
+                }
+                return task;
+            });
+        });
+    };
+
+    const calculateTotalPoints = (rating, difficulty) => {
+        let coefficient;
+
+        switch (difficulty) {
+            case "1":
+                coefficient = 0.2;
+                break;
+            case "2":
+                coefficient = 0.4;
+                break;
+            case "3":
+                coefficient = 0.6;
+                break;
+            case "4":
+                coefficient = 0.8;
+                break;
+            case "5":
+                coefficient = 1;
+                break;
+            default:
+                coefficient = 0;
+        }
+
+        const weightedRating = rating * coefficient;
+        const storyPoints = parseInt(difficulty, 10) || 0;
+        const totalPoints = Math.round(weightedRating + storyPoints);
+        return totalPoints;
+    };
+
+
     const handleCommentSubmit = (taskId, comment) => {
         // Обработчик отправки комментария к задаче
         setTasks(prevTasks => {
@@ -64,12 +105,11 @@ const ActiveTasks = () => {
     };
 
     const handleRateTask = (taskId) => {
-        // Обработчик нажатия на кнопку "Оценить" задачи
         const task = tasks.find((task) => task._id === taskId);
 
-        // Проверка на заполнение полей
         if (task.rating && task.comment && task.file) {
-            // Отправка данных в коллекцию taskCompleted
+            const totalPoints = calculateTotalPoints(task.rating, task.difficulty);
+
             const taskCompletedData = {
                 title: task.title,
                 description: task.description,
@@ -78,6 +118,7 @@ const ActiveTasks = () => {
                 rating: task.rating,
                 comment: task.comment,
                 file: task.file,
+                totalPoints: totalPoints,
             };
 
             axios
@@ -89,7 +130,6 @@ const ActiveTasks = () => {
                     console.log(error);
                 });
 
-            // Удаление задачи из коллекции tasks
             axios
                 .request({
                     method: 'DELETE',
@@ -97,7 +137,6 @@ const ActiveTasks = () => {
                 })
                 .then((response) => {
                     console.log('Task deleted:', taskId);
-                    // Обновление списка задач
                     setTasks(tasks.filter((task) => task._id !== taskId));
                 })
                 .catch((error) => {
@@ -140,6 +179,21 @@ const ActiveTasks = () => {
                                         onChange={(e) => handleRatingChange(task._id, e.target.value)}
                                         onClick={(e) => e.stopPropagation()}
                                     />
+                                </div>
+                                <div className={styles.difficulty}>
+                                    <label>Сложность:</label>
+                                    <select
+                                        value={task.difficulty || ''}
+                                        onChange={(e) => handleDifficultyChange(task._id, e.target.value)}
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <option value="">Выберите сложность</option>
+                                        <option value="1">1 - Низкая</option>
+                                        <option value="2">2 - Средняя</option>
+                                        <option value="3">3 - Высокая</option>
+                                        <option value="4">4 - Очень высокая</option>
+                                        <option value="5">5 - Критическая</option>
+                                    </select>
                                 </div>
                                 <div className={styles.comment}>
                                     <label>Комментарий:</label>

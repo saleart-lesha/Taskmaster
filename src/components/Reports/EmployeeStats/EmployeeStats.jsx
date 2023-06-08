@@ -32,11 +32,11 @@ const EmployeeStats = () => {
         const stats = {};
 
         tasks.forEach((task) => {
-            const { employee, rating } = task;
+            const { employee, totalPoints } = task;
             if (employee in stats) {
-                stats[employee] += parseInt(rating);
+                stats[employee] += parseInt(totalPoints);
             } else {
-                stats[employee] = parseInt(rating);
+                stats[employee] = parseInt(totalPoints);
             }
         });
 

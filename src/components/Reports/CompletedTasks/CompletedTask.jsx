@@ -59,6 +59,7 @@ const CompletedTasks = () => {
                     <h3>{task.title}</h3>
                     <p>Сотрудник: {task.employee}</p>
                     <p>Оценка: {task.rating}</p>
+                    <p>Общий балл: {task.totalPoints}</p>
                     {task.isSelected && (
                         <div className={styles["task-details"]}>
                             <h4>Подробное описание</h4>
