@@ -4,16 +4,16 @@ const express = require("express");
 const bcrypt = require('bcrypt');
 const { ObjectId } = require("mongodb");
 const { connectToDB, getProfilesCollection, getTasksCollection, getUsersCollection, getStaffCollection, getTaskCompletedCollection, getKnowledgeBaseCollection } = require("./db");
+
+// Подключение ChatGPT-----------------------------------------------------------------------------------------
+
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
     apiKey: "",
 });
+
 const openai = new OpenAIApi(configuration)
-
-
-
 const PORT = 3001;
-
 const app = express();
 
 let profilesCollection;
@@ -26,7 +26,6 @@ let knowledgeBaseCollection;
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
-
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -50,6 +49,8 @@ connectToDB((err) => {
         console.log(`DB connection error: ${err}`);
     }
 });
+
+// Авторизация--------------------------------------------------------------------------
 
 app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
@@ -77,6 +78,7 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// Профиль----------------------------------------------------------------
 
 app.get("/api/profile", async (req, res) => {
     try {
@@ -108,6 +110,7 @@ app.put("/api/profile", async (req, res) => {
     }
 });
 
+// Создание задачи------------------------------------------------------------------------------------------
 
 app.get("/api/tasks", async (req, res) => {
     try {
@@ -130,8 +133,7 @@ app.post("/api/tasks", async (req, res) => {
     }
 });
 
-
-// Staff
+// Сотрудники--------------------------------------------------------------------------------------------
 
 app.get("/api/staff", (req, res) => {
     staffCollection
@@ -159,9 +161,6 @@ app.post("/api/staff", (req, res) => {
             res.status(500).json({ error: "Не удалось добавить сотрудника" });
         });
 });
-
-
-// ...
 
 app.delete("/api/staff/:id", async (req, res) => {
     try {
@@ -195,7 +194,8 @@ app.get("/api/tasks/count", async (req, res) => {
     }
 });
 
-// календарь
+// календарь------------------------------------------------------------------------------------
+
 app.get("/api/tasks", async (req, res) => {
     try {
         const tasks = await tasksCollection.find().toArray();
@@ -206,6 +206,7 @@ app.get("/api/tasks", async (req, res) => {
     }
 });
 
+// Отчёты-----------------------------------------------------------------------------------------
 
 app.get('/api/completedTasks', async (req, res) => {
     try {
@@ -216,7 +217,6 @@ app.get('/api/completedTasks', async (req, res) => {
         res.status(500).json({ error: 'Ошибка при получении завершенных задач' });
     }
 });
-
 
 app.post('/api/taskCompleted', async (req, res) => {
     try {
@@ -251,6 +251,7 @@ app.delete("/api/tasks/:id", async (req, res) => {
     }
 });
 
+// База знаний------------------------------------------------------------------------------------------------------
 
 app.get("/api/KnowledgeBase", async (req, res) => {
     try {
@@ -261,7 +262,6 @@ app.get("/api/KnowledgeBase", async (req, res) => {
         res.status(500).json({ error: "Ошибка при получении базы знаний" });
     }
 });
-
 
 app.post("/api/KnowledgeBase", async (req, res) => {
     const { message } = req.body;

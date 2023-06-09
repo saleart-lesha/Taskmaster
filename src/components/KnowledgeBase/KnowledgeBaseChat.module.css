@@ -13,7 +13,7 @@
 
 .message-history {
   width: 100%;
-  max-width: 600px; /* Добавлено ограничение на максимальную ширину */
+  max-width: 600px;
   height: 500px;
   overflow-y: scroll;
   border: 1px solid #ccc;
@@ -68,7 +68,7 @@
   margin-right: 10px;
   resize: vertical;
   min-height: 50px;
-  min-width: 496px; /* Заменили фиксированную ширину на минимальную ширину */
+  min-width: 496px;
 }
 
 .send-button {

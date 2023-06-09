@@ -1,4 +1,3 @@
-
 .edit {
   background-color: rgb(42, 81, 97);
   color: #fff;
@@ -41,6 +40,7 @@
 }
 
 /* Блок биографии(ФИО,майл, телефон) */
+
 .bio{
     display: flex;
     flex-direction: column;

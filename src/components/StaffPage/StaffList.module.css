@@ -4,21 +4,21 @@
   padding: 16px;
   font-family: Arial, sans-serif;
   display: flex;
-  flex-direction: column; /* Добавлено для вертикального расположения элементов */
-  align-items: center; /* Добавлено для центрирования элементов по горизонтали */
+  flex-direction: column; 
+  align-items: center; 
 }
 
 .heading {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 16px;
-  text-align: center; /* Добавлено для центрирования заголовка */
+  text-align: center;
 }
 
 .staffList {
   list-style: none;
   padding: 0;
-  width: 100%; /* Добавлено, чтобы список занимал все доступное пространство по ширине */
+  width: 100%;
 }
 
 .member {
@@ -31,7 +31,7 @@
   padding: 16px;
   margin-bottom: 8px;
   transition: background-color 0.2s ease;
-  width: 100%; /* Добавлено, чтобы элементы списка занимали все доступное пространство по ширине */
+  width: 100%;
 }
 
 .member:hover {

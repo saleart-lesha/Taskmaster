@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
@@ -6,14 +5,11 @@ import Header from './components/Header/Header';
 import NavBar from './components/NavBar/NavBar';
 import Profile from './components/ProfilePage/Profile';
 import TaskComponent from './components/TaskPage/TaskComponent';
-// import Statement from './components/Reports/Statement';
 import StaffList from './components/StaffPage/StaffList';
 import Calendar from './components/CalendarPage/Calendar';
 import Login from './components/Loginization/Login';
 import Reports from './components/Reports/Reports';
 import KnowledgeBaseChat from './components/KnowledgeBase/KnowledgeBaseChat';
-// import { useNavigate } from 'react-router-dom';
-// import ReportComponent from './components/Reports/Reports';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -52,6 +48,5 @@ function App() {
     </div>
   );
 }
-
 
 export default App;
