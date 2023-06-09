@@ -4,6 +4,7 @@ import ActiveTasks from "./ActiveTasks/ActiveTasks";
 import CompletedTasks from "./CompletedTasks/CompletedTask";
 import Statistics from "./Statistics/Statistics";
 import EmployeeStats from "./EmployeeStats/EmployeeStats";
+import styles from "./Reports.module.css";
 
 const Reports = () => {
     const [activeTasks, setActiveTasks] = useState([]);
@@ -91,11 +92,15 @@ const Reports = () => {
             <h2>Выполненные задачи</h2>
             <CompletedTasks tasks={completedTasks} onSelect={handleTaskSelect} />
 
-            <EmployeeStats employeeStats={employeeStats} />
+            <div className={styles.statsContainer}>
+                <div className={styles.statsColumn}>
+                    <EmployeeStats employeeStats={employeeStats} />
+                </div>
 
-            <Statistics taskStats={taskStats} employeeStats={employeeStats} />
-
-
+                <div className={styles.statsColumn}>
+                    <Statistics taskStats={taskStats} employeeStats={employeeStats} />
+                </div>
+            </div>
         </div>
     );
 };
