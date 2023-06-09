@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styles from "./StaffList.module.css";
 import axios from "axios";
+import StaffListItem from "./StaffListItem/StaffListItem";
+import StaffForm from "./StaffForm/StaffForm";
 
 const StaffList = () => {
     const [staff, setStaff] = useState([]);
-    const [newStaffName, setNewStaffName] = useState("");
-    const [newStaffPosition, setNewStaffPosition] = useState("");
 
     useEffect(() => {
         fetchStaff();
@@ -37,27 +37,16 @@ const StaffList = () => {
             console.log("Ошибка при загрузке данных:", error);
         }
     };
-    const handleAddStaff = () => {
-        if (newStaffName && newStaffPosition) {
-            const newStaff = {
-                name: newStaffName,
-                position: newStaffPosition,
-                taskCount: 0,
-            };
 
-            axios
-                .post("http://localhost:3001/api/staff", newStaff)
-                .then((response) => {
-                    fetchStaff();
-                    setNewStaffName("");
-                    setNewStaffPosition("");
-                })
-                .catch((error) => {
-                    console.log("Ошибка при добавлении сотрудника:", error);
-                });
-        } else {
-            alert("Please enter both name and position.");
-        }
+    const handleAddStaff = (newStaff) => {
+        axios
+            .post("http://localhost:3001/api/staff", newStaff)
+            .then((response) => {
+                fetchStaff();
+            })
+            .catch((error) => {
+                console.log("Ошибка при добавлении сотрудника:", error);
+            });
     };
 
     const handleDeleteStaff = (id) => {
@@ -78,45 +67,14 @@ const StaffList = () => {
             <h1 className={styles.heading}>Список сотрудников</h1>
             <ul className={styles.staffList}>
                 {staff.map((member) => (
-                    <li key={member._id} className={styles.member}>
-                        <div className={styles.memberInfo}>
-                            <h3>{member.name}</h3>
-                            <p>{member.position}</p>
-                        </div>
-                        <div className={styles.taskCount}>
-                            <span>{member.taskCount}</span> Задачи
-                        </div>
-                        <div className={styles.actions}>
-                            <button
-                                className={styles.deleteButton}
-                                onClick={() => handleDeleteStaff(member._id)}
-                            >
-                                Удалить
-                            </button>
-                        </div>
-                    </li>
+                    <StaffListItem
+                        key={member._id}
+                        member={member}
+                        onDelete={handleDeleteStaff}
+                    />
                 ))}
             </ul>
-            <div className={styles.addMember}>
-                <h2>Добавить сотрудника</h2>
-                <input
-                    type="text"
-                    placeholder="ФИО"
-                    value={newStaffName}
-                    onChange={(e) => setNewStaffName(e.target.value)}
-                    className={styles.inputField}
-                />
-                <input
-                    type="text"
-                    placeholder="Должность"
-                    value={newStaffPosition}
-                    onChange={(e) => setNewStaffPosition(e.target.value)}
-                    className={styles.inputField}
-                />
-                <button className={styles.addButton} onClick={handleAddStaff}>
-                    Добавить
-                </button>
-            </div>
+            <StaffForm onAdd={handleAddStaff} />
         </div>
     );
 };

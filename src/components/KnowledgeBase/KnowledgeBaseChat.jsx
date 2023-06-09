@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./KnowledgeBaseChat.module.css";
+import MessageHistory from "./MessageHistory/MessageHistory";
+import MessageInput from "./MessageInput/MessageInput";
 
 const KnowledgeBaseChat = () => {
     const [messages, setMessages] = useState([]);
@@ -42,37 +44,13 @@ const KnowledgeBaseChat = () => {
 
     return (
         <div className={styles.container}>
-            <h2 className={styles["chat-heading"]}>База знаний: Чат</h2>
-            <div className={styles["message-history"]}>
-                <div className={styles["message-wrapper"]}>
-                    {messages.map((message, index) => (
-                        <div key={index} className={styles.message}>
-                            <div
-                                className={`${styles.bubble} ${styles["user-bubble"]}`}
-                            >
-                                <div className={styles["message-text"]}>{message.message}</div>
-                            </div>
-                            <div
-                                className={`${styles.bubble} ${styles["assistant-bubble"]}`}
-                            >
-                                <div className={styles["message-text"]}>{message.reply}</div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            <div className={styles["input-container"]}>
-                <textarea
-                    value={inputText}
-                    onChange={handleInputChange}
-                    placeholder="Введите сообщение..."
-                    className={styles["input-textarea"]} // Заменили класс стиля на input-textarea
-                    rows={3}
-                />
-                <button onClick={sendMessage} className={styles["send-button"]}>
-                    Отправить
-                </button>
-            </div>
+            <h2 className={styles.chatHeading}>База знаний</h2>
+            <MessageHistory messages={messages} />
+            <MessageInput
+                inputText={inputText}
+                handleInputChange={handleInputChange}
+                sendMessage={sendMessage}
+            />
         </div>
     );
 };
