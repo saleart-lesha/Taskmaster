@@ -39,7 +39,7 @@ const Calendar = () => {
 
     const getTasksForDate = (day) => {
         const formattedDate = new Date(date.getFullYear(), date.getMonth(), day);
-        return tasks.filter(task => isSameDay(formattedDate, new Date(task.deadline)));
+        return tasks.filter((task) => isSameDay(formattedDate, new Date(task.deadline)));
     };
 
     const isSameDay = (date1, date2) => {
@@ -51,6 +51,11 @@ const Calendar = () => {
             d1.getMonth() === d2.getMonth() &&
             d1.getFullYear() === d2.getFullYear()
         );
+    };
+
+    const getWeekday = (year, month, day) => {
+        const weekday = new Date(year, month, day).getDay();
+        return (weekday + 6) % 7; // Добавляем 6 и берем остаток от деления на 7 для получения корректного индекса дня недели
     };
 
     return (
@@ -75,18 +80,20 @@ const Calendar = () => {
                 ))}
 
                 {getDaysInMonth().map((day) => {
-                    const formattedDate = new Date(date.getFullYear(), date.getMonth(), day).toISOString().split('T')[0];
-                    const isToday = isSameDay(formattedDate, new Date().toISOString().split('T')[0]);
-                    const tasksForDate = getTasksForDate(day);
+                    const formattedDate = new Date(date.getFullYear(), date.getMonth(), day);
+                    const isToday = isSameDay(formattedDate, new Date());
 
                     return (
                         <div
                             key={day}
-                            className={`${styles.cell} ${tasksForDate.length > 0 ? styles.hasTasks : ""} ${isToday ? styles.today : ""}`}
+                            className={`${styles.cell} ${isToday ? styles.today : ""}`}
+                            style={{ gridColumnStart: getWeekday(date.getFullYear(), date.getMonth(), day) + 1 }}
                         >
                             <div className={styles.day}>{day}</div>
-                            {tasksForDate.map((task) => (
-                                <div key={task._id} className={styles.task}>{task.title}</div>
+                            {getTasksForDate(day).map((task) => (
+                                <div key={task._id} className={styles.task}>
+                                    {task.title}
+                                </div>
                             ))}
                         </div>
                     );
