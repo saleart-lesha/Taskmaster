@@ -2,7 +2,9 @@ import React from "react";
 import styles from "./StaffListItem.module.css";
 
 const StaffListItem = ({ member, onDelete }) => {
+    // Обработчик нажатия на кнопку удаления
     const handleDeleteClick = () => {
+        // Вызов функции обратного вызова для удаления сотрудника
         onDelete(member._id);
     };
 

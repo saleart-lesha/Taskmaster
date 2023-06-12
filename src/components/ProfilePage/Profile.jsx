@@ -4,6 +4,7 @@ import ReadOnlyProfile from "./BIO/ReadOnlyProfile";
 import EditableProfile from "./ProfileEdit/EditableProfile";
 import styles from "./Profile.module.css";
 
+// Компонент для отображения профиля пользователя
 const Profile = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [profileData, setProfileData] = useState({
@@ -17,6 +18,7 @@ const Profile = () => {
         loadProfileData();
     }, []);
 
+    // Загрузка данных профиля
     const loadProfileData = async () => {
         try {
             const response = await axios.get("http://localhost:3001/api/profile");
@@ -27,16 +29,20 @@ const Profile = () => {
         }
     };
 
+    // Обработчик события редактирования профиля
     const handleEdit = () => {
         setIsEditing(!isEditing);
     };
 
+    // Сохранение профиля
     const handleSave = async () => {
         try {
+            // Фильтрация данных профиля, удаляя пустые значения
             const filteredProfileData = Object.fromEntries(
                 Object.entries(profileData).filter(([key, value]) => value !== null && value !== "")
             );
 
+            // Отправка отфильтрованных данных профиля на сервер для сохранения
             await axios.put("http://localhost:3001/api/profile", filteredProfileData);
             setIsEditing(false);
             loadProfileData();
@@ -45,6 +51,7 @@ const Profile = () => {
         }
     };
 
+    // Обработчик изменения полей ввода профиля
     const handleInputChange = (name, value) => {
         setProfileData((prevData) => ({
             ...prevData,
@@ -52,6 +59,7 @@ const Profile = () => {
         }));
     };
 
+    // Обработчик изменения фото профиля
     const handlePhotoChange = (e) => {
         setProfileData((prevData) => ({
             ...prevData,
@@ -63,7 +71,9 @@ const Profile = () => {
 
     return (
         <div className={styles.profile}>
+            {/* Проверка режима редактирования профиля */}
             {isEditing ? (
+                // Компонент для редактирования профиля
                 <EditableProfile
                     name={name}
                     email={email}
@@ -74,6 +84,7 @@ const Profile = () => {
                     onSave={handleSave}
                 />
             ) : (
+                // Компонент для отображения только чтения профиля
                 <ReadOnlyProfile
                     name={name}
                     email={email}

@@ -3,10 +3,11 @@ import styles from "./Calendar.module.css";
 import axios from "axios";
 
 const Calendar = () => {
-    const [date, setDate] = useState(new Date());
-    const [tasks, setTasks] = useState([]);
+    const [date, setDate] = useState(new Date()); // Состояние для хранения текущей даты
+    const [tasks, setTasks] = useState([]); // Состояние для хранения задач
 
     useEffect(() => {
+        // Загрузка задач при монтировании компонента
         axios
             .get("http://localhost:3001/api/tasks")
             .then((response) => {
@@ -18,6 +19,7 @@ const Calendar = () => {
     }, []);
 
     const changeMonth = (delta) => {
+        // Изменение текущего месяца
         setDate((prevDate) => {
             const newMonth = prevDate.getMonth() + delta;
             const newYear = prevDate.getFullYear();
@@ -33,16 +35,19 @@ const Calendar = () => {
     };
 
     const getDaysInMonth = () => {
+        // Получение количества дней в текущем месяце
         const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
         return Array.from({ length: daysInMonth }, (_, i) => i + 1);
     };
 
     const getTasksForDate = (day) => {
+        // Получение задач для определенной даты
         const formattedDate = new Date(date.getFullYear(), date.getMonth(), day);
         return tasks.filter((task) => isSameDay(formattedDate, new Date(task.deadline)));
     };
 
     const isSameDay = (date1, date2) => {
+        // Проверка, являются ли две даты одним и тем же днем
         const d1 = new Date(date1);
         const d2 = new Date(date2);
 
@@ -54,6 +59,7 @@ const Calendar = () => {
     };
 
     const getWeekday = (year, month, day) => {
+        // Получение дня недели для определенной даты
         const weekday = new Date(year, month, day).getDay();
         return (weekday + 6) % 7; // Добавляем 6 и берем остаток от деления на 7 для получения корректного индекса дня недели
     };
@@ -74,6 +80,7 @@ const Calendar = () => {
 
             <div className={styles.grid}>
                 {["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"].map((dayName) => (
+                    // Отображение дней недели в заголовке
                     <div key={dayName} className={styles.cell}>
                         {dayName}
                     </div>
@@ -91,6 +98,7 @@ const Calendar = () => {
                         >
                             <div className={styles.day}>{day}</div>
                             {getTasksForDate(day).map((task) => (
+                                // Отображение задач для каждой даты
                                 <div key={task._id} className={styles.task}>
                                     {task.title}
                                 </div>

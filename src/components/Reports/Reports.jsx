@@ -78,12 +78,6 @@ const Reports = () => {
         setSelectedTask(task);
     };
 
-    // Обработчик оценки задачи
-    const handleTaskRating = (taskId, rating) => {
-        // Отправка оценки задачи на сервер и обновление данных
-        // в активных задачах и выполненных задачах
-    };
-
     return (
         <div>
             <h2>Активные задачи</h2>

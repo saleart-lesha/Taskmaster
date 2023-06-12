@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './ActiveTasks.module.css';
 
+// Компонент для отображения активных задач
 const ActiveTasks = () => {
     const [tasks, setTasks] = useState([]);
     const [expandedTask, setExpandedTask] = useState(null);
 
     useEffect(() => {
-        // Получение активных задач из коллекции tasks
+        // Загрузка активных задач
         axios
             .get('http://localhost:3001/api/tasks')
             .then((response) => {
@@ -40,6 +41,7 @@ const ActiveTasks = () => {
     };
 
     const handleDifficultyChange = (taskId, difficulty) => {
+        // Обработчик изменения сложности задачи
         setTasks(prevTasks => {
             return prevTasks.map(task => {
                 if (task._id === taskId) {
@@ -51,6 +53,7 @@ const ActiveTasks = () => {
     };
 
     const calculateTotalPoints = (rating, difficulty) => {
+        // Расчет общих баллов задачи на основе оценки и сложности
         let coefficient;
 
         switch (difficulty) {
@@ -105,6 +108,7 @@ const ActiveTasks = () => {
     };
 
     const handleRateTask = (taskId) => {
+        // Обработчик оценки задачи
         const task = tasks.find((task) => task._id === taskId);
 
         if (task.rating && task.comment && task.file) {
@@ -121,6 +125,7 @@ const ActiveTasks = () => {
                 totalPoints: totalPoints,
             };
 
+            // Отправка данных о выполненной задаче на сервер
             axios
                 .post('http://localhost:3001/api/taskCompleted', taskCompletedData)
                 .then((response) => {
@@ -130,6 +135,7 @@ const ActiveTasks = () => {
                     console.log(error);
                 });
 
+            // Удаление задачи из списка активных задач
             axios
                 .request({
                     method: 'DELETE',

@@ -6,6 +6,7 @@ const CompletedTasks = () => {
     const [completedTasks, setCompletedTasks] = useState([]);
 
     useEffect(() => {
+        // Загрузка выполненных задач при монтировании компонента
         fetchCompletedTasks();
 
         // Задаем интервал для опроса сервера каждые 5 секунд
@@ -19,6 +20,7 @@ const CompletedTasks = () => {
 
     const fetchCompletedTasks = async () => {
         try {
+            // Запрос на сервер для получения выполненных задач
             const response = await axios.get("http://localhost:3001/api/completedTasks");
             setCompletedTasks(response.data);
         } catch (error) {
@@ -27,6 +29,7 @@ const CompletedTasks = () => {
     };
 
     const handleTaskSelect = (taskId) => {
+        // Обработчик выбора/снятия выбора задачи
         const updatedTasks = completedTasks.map((task) => {
             if (task._id === taskId) {
                 return {
@@ -40,6 +43,7 @@ const CompletedTasks = () => {
     };
 
     const formatTextWithLineBreaks = (text) => {
+        // Функция форматирования текста с разрывами строк
         return text.split("\n").map((line, index) => (
             <React.Fragment key={index}>
                 {line}

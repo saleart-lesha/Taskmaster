@@ -8,6 +8,7 @@ const Statistics = () => {
     const [taskStats, setTaskStats] = useState(null);
 
     useEffect(() => {
+        // Загрузка статистики выполненных задач при монтировании компонента
         loadTaskStatistics();
 
         // Задаем интервал для опроса сервера каждые 5 секунд
@@ -21,8 +22,11 @@ const Statistics = () => {
 
     const loadTaskStatistics = async () => {
         try {
+            // Запрос на сервер для получения выполненных задач
             const response = await axios.get("http://localhost:3001/api/completedTasks");
             const tasks = response.data;
+
+            // Инициализация статистики задач
             const stats = {
                 0: 0,
                 20: 0,
@@ -32,6 +36,7 @@ const Statistics = () => {
                 100: 0,
             };
 
+            // Подсчет количества задач для каждого диапазона оценок
             tasks.forEach((task) => {
                 const rating = parseInt(task.rating);
                 if (rating >= 0 && rating <= 20) {
@@ -54,6 +59,7 @@ const Statistics = () => {
     };
 
     useEffect(() => {
+        // Регистрация контроллеров Chart.js при обновлении статистики задач
         if (taskStats) {
             try {
                 Chart.register(...Object.values(Chart.controllers));
@@ -63,6 +69,7 @@ const Statistics = () => {
         }
     }, [taskStats]);
 
+    // Данные для отображения графика
     const data = {
         labels: ["0-20", "21-40", "41-60", "61-80", "81-100"],
         datasets: [
@@ -88,6 +95,7 @@ const Statistics = () => {
         ],
     };
 
+    // Параметры для настройки графика
     const options = {
         scales: {
             y: {

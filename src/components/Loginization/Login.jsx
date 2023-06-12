@@ -3,8 +3,8 @@ import axios from 'axios';
 import styles from './Login.module.css';
 
 function Login({ onLogin }) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState(''); // Состояние для хранения email
+    const [password, setPassword] = useState(''); // Состояние для хранения пароля
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -28,11 +28,11 @@ function Login({ onLogin }) {
     };
 
     const handleEmailChange = (e) => {
-        setEmail(e.target.value);
+        setEmail(e.target.value); // Обработка изменений email
     };
 
     const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
+        setPassword(e.target.value); // Обработка изменений пароля
     };
 
     return (

@@ -5,18 +5,25 @@ const StaffForm = ({ onAdd }) => {
     const [newStaffName, setNewStaffName] = useState("");
     const [newStaffPosition, setNewStaffPosition] = useState("");
 
+    // Обработчик добавления нового сотрудника
     const handleAddStaff = () => {
+        // Проверка наличия введенного имени и должности
         if (newStaffName && newStaffPosition) {
+            // Создание нового сотрудника
             const newStaff = {
                 name: newStaffName,
                 position: newStaffPosition,
                 taskCount: 0,
             };
 
+            // Вызов функции обратного вызова для добавления сотрудника
             onAdd(newStaff);
+
+            // Сброс значений полей ввода
             setNewStaffName("");
             setNewStaffPosition("");
         } else {
+            // Оповещение пользователя о необходимости ввести имя и должность
             alert("Please enter both name and position.");
         }
     };

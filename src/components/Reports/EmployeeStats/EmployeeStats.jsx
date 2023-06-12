@@ -6,12 +6,15 @@ const EmployeeStats = () => {
     const [employeeStats, setEmployeeStats] = useState([]);
 
     useEffect(() => {
+        // Загрузка статистики сотрудников при монтировании компонента
         loadEmployeeStatistics();
 
+        // Задаем интервал для опроса сервера каждые 5 секунд
         const interval = setInterval(() => {
             loadEmployeeStatistics();
         }, 5000);
 
+        // Очищаем интервал при размонтировании компонента
         return () => {
             clearInterval(interval);
         };
@@ -19,6 +22,7 @@ const EmployeeStats = () => {
 
     const loadEmployeeStatistics = async () => {
         try {
+            // Запрос на сервер для получения выполненных задач
             const response = await axios.get("http://localhost:3001/api/completedTasks");
             const tasks = response.data;
             const stats = calculateEmployeeStats(tasks);
@@ -29,6 +33,7 @@ const EmployeeStats = () => {
     };
 
     const calculateEmployeeStats = (tasks) => {
+        // Расчет статистики сотрудников на основе выполненных задач
         const stats = {};
 
         tasks.forEach((task) => {
