@@ -30,8 +30,8 @@ const ActiveTasks = () => {
 
     const handleRatingChange = (taskId, rating) => {
         // Обработчик изменения оценки задачи
-        setTasks(prevTasks => {
-            return prevTasks.map(task => {
+        setTasks((prevTasks) => {
+            return prevTasks.map((task) => {
                 if (task._id === taskId) {
                     return { ...task, rating: rating };
                 }
@@ -42,8 +42,8 @@ const ActiveTasks = () => {
 
     const handleDifficultyChange = (taskId, difficulty) => {
         // Обработчик изменения сложности задачи
-        setTasks(prevTasks => {
-            return prevTasks.map(task => {
+        setTasks((prevTasks) => {
+            return prevTasks.map((task) => {
                 if (task._id === taskId) {
                     return { ...task, difficulty: difficulty };
                 }
@@ -57,19 +57,19 @@ const ActiveTasks = () => {
         let coefficient;
 
         switch (difficulty) {
-            case "1":
+            case '1':
                 coefficient = 0.2;
                 break;
-            case "2":
+            case '2':
                 coefficient = 0.4;
                 break;
-            case "3":
+            case '3':
                 coefficient = 0.6;
                 break;
-            case "4":
+            case '4':
                 coefficient = 0.8;
                 break;
-            case "5":
+            case '5':
                 coefficient = 1;
                 break;
             default:
@@ -82,11 +82,10 @@ const ActiveTasks = () => {
         return totalPoints;
     };
 
-
     const handleCommentSubmit = (taskId, comment) => {
         // Обработчик отправки комментария к задаче
-        setTasks(prevTasks => {
-            return prevTasks.map(task => {
+        setTasks((prevTasks) => {
+            return prevTasks.map((task) => {
                 if (task._id === taskId) {
                     return { ...task, comment: comment };
                 }
@@ -95,17 +94,15 @@ const ActiveTasks = () => {
         });
     };
 
-    const handleFileUpload = (taskId, file) => {
-        // Обработчик загрузки файла для задачи
-        setTasks(prevTasks => {
-            return prevTasks.map(task => {
-                if (task._id === taskId) {
-                    return { ...task, file: file };
-                }
-                return task;
-            });
-        });
-    };
+    // const handleFileDownload = (taskId) => {
+    //     // Обработчик скачивания файла для задачи
+    //     const task = tasks.find((task) => task._id === taskId);
+    //     if (task.file) {
+    //         // Загрузка файла
+    //         // Реализуйте функционал скачивания файла здесь
+    //         console.log('Скачивание файла:', task.file);
+    //     }
+    // };
 
     const handleRateTask = (taskId) => {
         // Обработчик оценки задачи
@@ -210,12 +207,8 @@ const ActiveTasks = () => {
                                     ></textarea>
                                 </div>
                                 <div className={styles.file}>
-                                    <label>Прикрепить файл:</label>
-                                    <input
-                                        type="file"
-                                        onChange={(e) => handleFileUpload(task._id, e.target.files[0])}
-                                        onClick={(e) => e.stopPropagation()}
-                                    />
+                                    <label>Скачать файл:</label>
+                                    <button>Скачать</button>
                                 </div>
                                 <button onClick={() => handleRateTask(task._id)}>Оценить</button>
                             </div>
